@@ -18,15 +18,17 @@ posts.splice(3)
 
 <Layout seo={homePageContent.seo}>
   <section class="mt-10 max-w-2xl mx-auto px-6 scroll-reveal">
-    <h1 class="font-bold text-3xl mb-8">{identity.name}</h1>
+    <h1 class="gradient-name font-bold text-3xl mb-8">{identity.name}</h1>
     <div class="flex items-center gap-6 mb-8">
-      <Image
-        src={identity.logo}
-        alt={identity.name}
-        width={150}
-        height={150}
-        class="rounded-full shrink-0"
-      />
+      <div class="profile-glow shrink-0">
+        <Image
+          src={identity.logo}
+          alt={identity.name}
+          width={150}
+          height={150}
+          class="rounded-full"
+        />
+      </div>
       <div class="group flex flex-col gap-2">
         {
           homePageContent.socialLinks.map((link) => (
@@ -53,22 +55,24 @@ posts.splice(3)
       }
     </div>
   </section>
-  <section class="mt-20 max-w-2xl mx-auto px-6 scroll-reveal">
-    <h2 class="mb-8">Latest Posts</h2>
-    <div class="grid grid-cols-1 gap-10 sm:gap-6 mb-10">
+  <section class="mt-20 max-w-2xl mx-auto px-6">
+    <h2 class="mb-8 scroll-reveal">Latest Posts</h2>
+    <div class="stagger-container grid grid-cols-1 gap-10 sm:gap-6 mb-10">
       {
         posts.map((post) => (
           <a
             href={`/blog/${post.id.replace(/\.md$/, '')}`}
-            class=" sm:flex sm:flex-row-reverse sm:justify-between sm:gap-6 post"
+            class="tilt-card sm:flex sm:flex-row-reverse sm:justify-between sm:gap-6 post"
           >
-            <Image
-              src={post.data.image.url}
-              alt={post.data.image.url}
-              width={100}
-              height={100}
-              class={"rounded-lg w-[100px] h-[100px] object-cover"}
-            />
+            <div class="rounded-lg overflow-hidden w-[100px] h-[100px] shrink-0">
+              <Image
+                src={post.data.image.url}
+                alt={post.data.image.url}
+                width={100}
+                height={100}
+                class="post-img w-full h-full object-cover"
+              />
+            </div>
             <div class="mt-4 sm:my-auto">
               <p class="opacity-60 mb-2">
                 {post.data.pubDate.toLocaleDateString()}
@@ -91,7 +95,7 @@ posts.splice(3)
   {homePageContent.currentlyReading && homePageContent.currentlyReading.length > 0 && (
     <section class="mt-20 max-w-2xl mx-auto px-6 mb-20 scroll-reveal">
       <h2 class="mb-8">Recent Reads</h2>
-      <ul class="space-y-3">
+      <ul class="stagger-container space-y-3">
         {homePageContent.currentlyReading.map((book) => (
           <li class="flex items-baseline gap-2">
             {book.url ? (

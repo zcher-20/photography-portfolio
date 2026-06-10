@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
+import { ViewTransitions } from "astro:transitions";
 import { navBarLinks, identity } from "../config";
 import type { SEOInfo } from "../types/config";
 
@@ -10,6 +11,7 @@ interface Props {
 
 const { seo } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const currentPath = Astro.url.pathname;
 const fullImageURL = seo.image?.startsWith("http")
   ? seo.image
   : new URL(seo.image || "/logo.webp", Astro.site).toString();
@@ -89,6 +91,8 @@ const fullImageURL = seo.image?.startsWith("http")
     <!-- RSS Feed -->
     <link rel="alternate" type="application/rss+xml" title="Anika Somaia's Blog" href="/rss.xml" />
 
+    <ViewTransitions />
+
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
@@ -126,17 +130,27 @@ const fullImageURL = seo.image?.startsWith("http")
         <nav class="ml-auto mr-0 sm:mr-4">
           <ul class="hidden sm:flex sm:items-center sm:gap-2">
             {
-              navBarLinks.map((link) => (
-                <li>
-                  <a
-                    class="group px-4 py-2 rounded-lg hover:bg-gray-bg-light dark:hover:bg-gray-bg opacity-60 hover:opacity-100 transition-all"
-                    href={link.url}
-                    target={link.external ? "_blank" : "_self"}
-                  >
-                    {link.title}
-                  </a>
-                </li>
-              ))
+              navBarLinks.map((link) => {
+                const isActive = link.url === "/"
+                  ? currentPath === "/"
+                  : currentPath === link.url || currentPath.startsWith(link.url + "/");
+                return (
+                  <li>
+                    <a
+                      class:list={[
+                        "group px-4 py-2 rounded-lg transition-all",
+                        isActive
+                          ? "opacity-100 bg-gray-bg-light dark:bg-gray-bg"
+                          : "opacity-60 hover:opacity-100 hover:bg-gray-bg-light dark:hover:bg-gray-bg"
+                      ]}
+                      href={link.url}
+                      target={link.external ? "_blank" : "_self"}
+                    >
+                      {link.title}
+                    </a>
+                  </li>
+                );
+              })
             }
           </ul>
           <div class="relative sm:hidden">
@@ -172,6 +186,16 @@ const fullImageURL = seo.image?.startsWith("http")
     <main class="mb-32">
       <slot />
     </main>
+    <!-- Custom cursor -->
+    <div id="cursor-dot" aria-hidden="true"></div>
+    <div id="cursor-ring" aria-hidden="true"></div>
+
+    <!-- Reading progress -->
+    <div id="reading-progress" aria-hidden="true"></div>
+
+    <!-- Mouse spotlight -->
+    <div id="spotlight" aria-hidden="true"></div>
+
     <footer class="border-t border-gray-200 dark:border-gray-800 mt-16">
       <div class="max-w-2xl mx-auto px-6 py-8">
         <div class="text-center text-sm opacity-60 space-y-2">
@@ -180,16 +204,119 @@ const fullImageURL = seo.image?.startsWith("http")
         </div>
       </div>
     </footer>
-    <script is:inline>
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
+    <script>
+      function initPage() {
+        // Scroll reveal
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.scroll-reveal').forEach((el) => revealObserver.observe(el));
+
+        // Stagger reveal
+        const staggerObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('revealed');
+              staggerObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.stagger-container').forEach((el) => staggerObserver.observe(el));
+
+        // Reading progress bar
+        const progressBar = document.getElementById('reading-progress');
+        if (progressBar) {
+          const onScroll = () => {
+            const doc = document.documentElement;
+            const pct = (doc.scrollTop / Math.max(1, doc.scrollHeight - doc.clientHeight)) * 100;
+            progressBar.style.width = pct + '%';
+          };
+          window.removeEventListener('scroll', (window as any)._progressHandler);
+          (window as any)._progressHandler = onScroll;
+          window.addEventListener('scroll', onScroll, { passive: true });
+          onScroll();
+        }
+
+        // 3D card tilt
+        document.querySelectorAll('.tilt-card').forEach((el) => {
+          const card = el as HTMLElement;
+          card.addEventListener('mousemove', (e: MouseEvent) => {
+            const r = card.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width;
+            const y = (e.clientY - r.top) / r.height;
+            const rx = (y - 0.5) * -7;
+            const ry = (x - 0.5) * 7;
+            card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;
+            card.style.transition = 'transform 0.1s ease, opacity 0.2s ease';
+          });
+          card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(900px) rotateX(0) rotateY(0) scale3d(1,1,1)';
+            card.style.transition = 'transform 0.55s ease, opacity 0.2s ease';
+          });
         });
-      }, { threshold: 0.1 });
-      document.querySelectorAll('.scroll-reveal').forEach((el) => observer.observe(el));
+
+        // Custom cursor
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+        const spotlight = document.getElementById('spotlight');
+        if (cursorDot && cursorRing && window.matchMedia('(pointer: fine)').matches) {
+          let mx = 0, my = 0, rx = 0, ry = 0, active = false;
+
+          const onMove = (e: MouseEvent) => {
+            mx = e.clientX;
+            my = e.clientY;
+            cursorDot.style.left = mx + 'px';
+            cursorDot.style.top = my + 'px';
+            if (!active) {
+              active = true;
+              rx = mx; ry = my;
+              cursorDot.style.opacity = '1';
+              cursorRing.style.opacity = '0.45';
+            }
+            if (spotlight) {
+              spotlight.style.background = `radial-gradient(550px circle at ${mx}px ${my}px, rgba(128,128,128,0.06), transparent 40%)`;
+            }
+          };
+
+          window.removeEventListener('mousemove', (window as any)._cursorHandler);
+          (window as any)._cursorHandler = onMove;
+          window.addEventListener('mousemove', onMove);
+
+          document.addEventListener('mouseleave', () => {
+            cursorDot.style.opacity = '0';
+            cursorRing.style.opacity = '0';
+          });
+          document.addEventListener('mouseenter', () => {
+            if (active) { cursorDot.style.opacity = '1'; cursorRing.style.opacity = '0.45'; }
+          });
+
+          if (!(window as any)._cursorLoop) {
+            (window as any)._cursorLoop = true;
+            const loop = () => {
+              rx += (mx - rx) * 0.11;
+              ry += (my - ry) * 0.11;
+              if (cursorRing) {
+                cursorRing.style.left = rx + 'px';
+                cursorRing.style.top = ry + 'px';
+              }
+              requestAnimationFrame(loop);
+            };
+            loop();
+          }
+
+          document.querySelectorAll('a, button, [role="button"]').forEach((el) => {
+            el.addEventListener('mouseenter', () => cursorRing.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => cursorRing.classList.remove('cursor-hover'));
+          });
+        }
+      }
+
+      document.addEventListener('astro:page-load', initPage);
     </script>
   </body>
 </html>
@@ -250,13 +377,161 @@ const fullImageURL = seo.image?.startsWith("http")
     color: #93c5fd;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Scroll reveal */
   .scroll-reveal {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transform: translateY(22px);
+    transition: opacity 0.65s ease-out, transform 0.65s ease-out;
   }
   .scroll-reveal.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* Stagger container reveal */
+  .stagger-container > * {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.55s ease-out, transform 0.55s ease-out;
+  }
+  .stagger-container.revealed > * { opacity: 1; transform: none; }
+  .stagger-container.revealed > *:nth-child(1) { transition-delay: 0ms; }
+  .stagger-container.revealed > *:nth-child(2) { transition-delay: 80ms; }
+  .stagger-container.revealed > *:nth-child(3) { transition-delay: 160ms; }
+  .stagger-container.revealed > *:nth-child(4) { transition-delay: 240ms; }
+  .stagger-container.revealed > *:nth-child(n+5) { transition-delay: 320ms; }
+
+  /* Custom cursor */
+  #cursor-dot,
+  #cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  #cursor-dot {
+    width: 5px;
+    height: 5px;
+    background: currentColor;
+    z-index: 100000;
+  }
+  #cursor-ring {
+    width: 28px;
+    height: 28px;
+    border: 1.5px solid currentColor;
+    z-index: 99999;
+    transition: width 0.32s ease, height 0.32s ease, opacity 0.4s ease;
+  }
+  #cursor-ring.cursor-hover {
+    width: 46px;
+    height: 46px;
+    opacity: 0.18 !important;
+  }
+  @media (hover: none), (pointer: coarse) {
+    #cursor-dot, #cursor-ring { display: none !important; }
+    * { cursor: auto !important; }
+  }
+  @media (pointer: fine) {
+    * { cursor: none !important; }
+    a, button, [role="button"] { cursor: none !important; }
+  }
+
+  /* Reading progress bar */
+  #reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 0;
+    background: currentColor;
+    z-index: 99998;
+    opacity: 0.35;
+    transition: width 0.08s linear;
+    pointer-events: none;
+  }
+
+  /* Spotlight */
+  #spotlight {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Gradient name shimmer */
+  :root {
+    --ng1: #111111;
+    --ng2: #666666;
+  }
+  html.dark {
+    --ng1: #ffffff;
+    --ng2: #999999;
+  }
+
+  @keyframes shimmer-pan {
+    from { background-position: 0% center; }
+    to { background-position: -200% center; }
+  }
+
+  .gradient-name {
+    background: linear-gradient(
+      90deg,
+      var(--ng1) 0%,
+      var(--ng1) 25%,
+      var(--ng2) 50%,
+      var(--ng1) 75%,
+      var(--ng1) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer-pan 5s linear infinite;
+  }
+
+  /* Tilt card */
+  .tilt-card {
+    will-change: transform;
+  }
+
+  /* Post image zoom */
+  .post-img {
+    transition: transform 0.4s ease;
+  }
+  .post:hover .post-img {
+    transform: scale(1.06);
+  }
+
+  /* Profile glow ring */
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(1.05); }
+  }
+  .profile-glow {
+    position: relative;
+    display: inline-block;
+  }
+  .profile-glow::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(100,100,100,0.5) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .profile-glow:hover::before {
+    opacity: 1;
+    animation: glow-pulse 2s ease-in-out infinite;
   }
 </style>

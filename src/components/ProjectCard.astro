@@ -10,18 +10,18 @@ const { title, description, image, year, url, demoUrl } = Astro.props;
 const htmlDescription = marked.parse(description)
 ---
 
-<div class="sm:py-5 py-10 flex flex-col sm:flex-row gap-6 group-hover:opacity-60 hover:!opacity-100 transition-opacity">
+<div class="tilt-card sm:py-5 py-10 flex flex-col sm:flex-row gap-6 group-hover:opacity-60 hover:!opacity-100 transition-opacity rounded-xl">
   <a
     href={url}
     target="_blank"
-    class="h-full bg-gray-200 dark:bg-gray-700 rounded-lg aspect-video sm:h-[150px] block"
+    class="overflow-hidden h-full bg-gray-200 dark:bg-gray-700 rounded-lg aspect-video sm:h-[150px] block"
   >
     <Image
       width={1920}
       height={1080}
       src={image}
       alt={title}
-      class="w-full h-full object-cover rounded-lg aspect-video"
+      class="post-img w-full h-full object-cover rounded-lg aspect-video"
     />
   </a>
   <div class="flex-1">
