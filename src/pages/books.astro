@@ -34,27 +34,43 @@ const BOOKS = [
     image: identity.logo,
   }}
 >
-  <section class="mt-10 max-w-2xl mx-auto px-6 scroll-reveal">
+  <section class="mt-10 max-w-2xl mx-auto px-6 scroll-reveal text-center">
     <h1 class="font-bold text-3xl mb-1">Bookshelf</h1>
     <p class="opacity-40 mb-10">Tracking my progress as I read a book from every country in the world.</p>
   </section>
-  <section id="map-container" class="books-map">
-  </section>
+
+  <section id="map-container" class="books-map"></section>
   <div id="tooltip" class="books-tooltip"></div>
   <script id="books-data" type="application/json" set:html={JSON.stringify(BOOKS)} />
-  <section class="mt-16 max-w-2xl mx-auto px-6 mb-20 scroll-reveal">
-    <ul class="space-y-3">
+
+  <!-- Favorites marquee -->
+  <section class="mt-16 mb-4 scroll-reveal">
+    <div class="max-w-2xl mx-auto px-6 mb-6 text-center">
+      <h1 class="font-bold text-3xl mb-1">Favorites</h1>
+    </div>
+    <div style="overflow:hidden; width:100%; position:relative;">
+      <div style="position:absolute; left:0; top:0; bottom:0; width:80px; background:linear-gradient(to right, white, transparent); z-index:2; pointer-events:none;"></div>
+      <div style="position:absolute; right:0; top:0; bottom:0; width:80px; background:linear-gradient(to left, white, transparent); z-index:2; pointer-events:none;"></div>
+      <div id="marquee-track" style="display:flex; gap:20px; width:max-content; will-change:transform; padding: 8px 0 16px;"></div>
+    </div>
+  </section>
+
+  <!-- Country list -->
+  <section class="mt-8 max-w-2xl mx-auto px-6 mb-20 scroll-reveal">
+    <h1 class="font-bold text-3xl mb-6 text-center">Reading the World</h1>
+    <ul class="grid grid-cols-2 gap-x-8 gap-y-3">
       {BOOKS.map((book) => (
         <li class="flex items-baseline gap-2 text-sm">
           <span class="opacity-60 shrink-0">{book.country}</span>
           <span class="opacity-30">–</span>
           <span class="font-medium">{book.title}</span>
-          {book.author && <span class="opacity-60">by {book.author}{book.favorite ? " *" : ""}</span>}
+          {book.author && <span class="opacity-60 hidden sm:inline">by {book.author}{book.favorite ? " *" : ""}</span>}
         </li>
       ))}
     </ul>
     <p class="text-xs opacity-40 mt-8">* personal favourite</p>
   </section>
+
 </Layout>
 
 <style is:global>
@@ -83,6 +99,88 @@ const BOOKS = [
     border-radius: 0;
   }
 </style>
+
+<script>
+  // Favorites marquee
+  const FAVORITES = [
+    { title: "Never Let Me Go", author: "Kazuo Ishiguro" },
+    { title: "The Picture of Dorian Gray", author: "Oscar Wilde" },
+    { title: "East of Eden", author: "John Steinbeck" },
+    { title: "The Year of Magical Thinking", author: "Joan Didion" },
+    { title: "Giovanni's Room", author: "James Baldwin" },
+    { title: "Thinking, Fast and Slow", author: "Daniel Kahneman" },
+    { title: "Just Kids", author: "Patti Smith" },
+    { title: "Sula", author: "Toni Morrison" },
+    { title: "The Invisible Life of Addie LaRue", author: "V. E. Schwab" },
+    { title: "Normal People", author: "Sally Rooney" },
+    { title: "Devotions", author: "Mary Oliver" },
+    { title: "Walden", author: "Henry David Thoreau" },
+    { title: "The Book Thief", author: "Markus Zusak" },
+    { title: "All About Love", author: "bell hooks" },
+    { title: "White Nights", author: "Fyodor Dostoyevsky" },
+    { title: "Atonement", author: "Ian McEwan" },
+    { title: "The Secret History", author: "Donna Tartt" },
+  ];
+
+  const COVERS: Record<string, string> = {
+    "Never Let Me Go": "https://covers.openlibrary.org/b/isbn/1400043395-M.jpg",
+    "The Picture of Dorian Gray": "https://covers.openlibrary.org/b/isbn/0141439572-M.jpg",
+    "East of Eden": "https://covers.openlibrary.org/b/isbn/0142004235-M.jpg",
+    "A Breath of Life": "https://covers.openlibrary.org/b/isbn/0811219895-M.jpg",
+    "Giovanni's Room": "https://covers.openlibrary.org/b/isbn/0375701877-M.jpg",
+    "Thinking, Fast and Slow": "https://covers.openlibrary.org/b/isbn/9780374533557-M.jpg",
+    "Just Kids": "https://covers.openlibrary.org/b/isbn/9780060936228-M.jpg",
+    "Sula": "https://covers.openlibrary.org/b/isbn/1400033438-M.jpg",
+    "The Invisible Life of Addie LaRue": "https://covers.openlibrary.org/b/isbn/0765387565-M.jpg",
+    "Normal People": "https://covers.openlibrary.org/b/isbn/9781984822178-M.jpg",
+    "Devotions": "https://books.google.com/books/content?vid=ISBN9780399563249&printsec=frontcover&img=1&zoom=1",
+    "Walden": "https://covers.openlibrary.org/b/isbn/9780691096124-M.jpg",
+    "The Year of Magical Thinking": "/magical-thinking.jpg",
+    "The Book Thief": "https://covers.openlibrary.org/b/isbn/0375842209-M.jpg",
+    "All About Love": "https://covers.openlibrary.org/b/isbn/0060959479-M.jpg",
+    "White Nights": "https://covers.openlibrary.org/b/isbn/9780140449266-M.jpg",
+    "Atonement": "https://covers.openlibrary.org/b/isbn/9780385721790-M.jpg",
+    "The Secret History": "https://covers.openlibrary.org/b/isbn/1400031702-M.jpg",
+  };
+
+  const track = document.getElementById('marquee-track')!;
+  const all = [...FAVORITES, ...FAVORITES];
+
+  all.forEach(({ title, author }) => {
+    const cover = COVERS[title] ?? '';
+    const item = document.createElement('div');
+    item.style.cssText = 'flex-shrink:0; width:90px; cursor:default;';
+    item.innerHTML = `
+      <div style="width:90px; height:130px; border-radius:4px; overflow:hidden; background:#f3f4f6; margin-bottom:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+        ${cover
+          ? `<img src="${cover}" alt="${title}" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.style.background='#e5e7eb'" />`
+          : `<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:8px;font-size:9px;text-align:center;color:#9ca3af;">${title}</div>`
+        }
+      </div>
+      <p style="font-size:10px; font-weight:500; line-height:1.3; margin:0; opacity:0.8;">${title}</p>
+      <p style="font-size:9px; opacity:0.45; margin:2px 0 0;">${author}</p>
+    `;
+    track.appendChild(item);
+  });
+
+  let x = 0;
+  let paused = false;
+  const speed = 0.5;
+
+  track.addEventListener('mouseenter', () => { paused = true; });
+  track.addEventListener('mouseleave', () => { paused = false; });
+
+  function animate() {
+    if (!paused) {
+      x -= speed;
+      const half = track.scrollWidth / 2;
+      if (Math.abs(x) >= half) x = 0;
+      track.style.transform = `translateX(${x}px)`;
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
 
 <script>
   import * as d3 from "d3";

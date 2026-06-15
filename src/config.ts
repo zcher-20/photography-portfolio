@@ -162,7 +162,7 @@ export const projectsPageContent: ProjectPageContent = {
       description:
         "5-agent LLM pipeline on Azure AI Foundry — Research, Financial Analysis, Risk, News, and Memo agents producing a full investment thesis from a single stock ticker. Microsoft Agents League Hackathon.",
       image: "/project-investment.jpg",
-      url: "https://github.com/zcher-20",
+      url: "https://github.com/zcher-20/Alpha-Research-Agent-",
     },
     {
       title: "RICER — AI Forest Fire Risk Prediction",
@@ -176,7 +176,7 @@ export const projectsPageContent: ProjectPageContent = {
       description:
         "Hybrid quantum-classical U-Net replacing the CNN bottleneck with a 4-qubit PennyLane variational circuit. 95% IoU at 60% fewer parameters (2M vs 5M). NYU Abu Dhabi Hackathon — Quantum Track.",
       image: "/project-quantum.jpg",
-      url: "https://github.com/zcher-20",
+      url: "https://github.com/zcher-20/SihaSansFrontieres",
     },
     {
       title: "Analog In-Memory Computing with Uncertainty Quantification for Edge Medical Imaging",
