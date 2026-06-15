@@ -78,13 +78,11 @@ const BOOKS = [
     background: #000;
     overflow: hidden;
   }
-
   .books-map svg {
     display: block;
     width: 100%;
     height: auto;
   }
-
   .books-tooltip {
     display: none;
     position: fixed;
@@ -100,85 +98,86 @@ const BOOKS = [
 </style>
 
 <script>
-  // Favorites marquee
-  const FAVORITES = [
-    { title: "Never Let Me Go", author: "Kazuo Ishiguro" },
-    { title: "The Picture of Dorian Gray", author: "Oscar Wilde" },
-    { title: "East of Eden", author: "John Steinbeck" },
-    { title: "The Year of Magical Thinking", author: "Joan Didion" },
-    { title: "Giovanni's Room", author: "James Baldwin" },
-    { title: "Thinking, Fast and Slow", author: "Daniel Kahneman" },
-    { title: "Just Kids", author: "Patti Smith" },
-    { title: "Sula", author: "Toni Morrison" },
-    { title: "The Invisible Life of Addie LaRue", author: "V. E. Schwab" },
-    { title: "Normal People", author: "Sally Rooney" },
-    { title: "Devotions", author: "Mary Oliver" },
-    { title: "Walden", author: "Henry David Thoreau" },
-    { title: "The Book Thief", author: "Markus Zusak" },
-    { title: "All About Love", author: "bell hooks" },
-    { title: "White Nights", author: "Fyodor Dostoyevsky" },
-    { title: "Atonement", author: "Ian McEwan" },
-    { title: "The Secret History", author: "Donna Tartt" },
-  ];
+  (function () {
+    var FAVORITES = [
+      { title: "Never Let Me Go", author: "Kazuo Ishiguro" },
+      { title: "The Picture of Dorian Gray", author: "Oscar Wilde" },
+      { title: "East of Eden", author: "John Steinbeck" },
+      { title: "The Year of Magical Thinking", author: "Joan Didion" },
+      { title: "Giovanni's Room", author: "James Baldwin" },
+      { title: "Thinking, Fast and Slow", author: "Daniel Kahneman" },
+      { title: "Just Kids", author: "Patti Smith" },
+      { title: "Sula", author: "Toni Morrison" },
+      { title: "The Invisible Life of Addie LaRue", author: "V. E. Schwab" },
+      { title: "Normal People", author: "Sally Rooney" },
+      { title: "Devotions", author: "Mary Oliver" },
+      { title: "Walden", author: "Henry David Thoreau" },
+      { title: "The Book Thief", author: "Markus Zusak" },
+      { title: "All About Love", author: "bell hooks" },
+      { title: "White Nights", author: "Fyodor Dostoyevsky" },
+      { title: "Atonement", author: "Ian McEwan" },
+      { title: "The Secret History", author: "Donna Tartt" },
+    ];
 
-  const COVERS: Record<string, string> = {
-    "Never Let Me Go": "https://covers.openlibrary.org/b/isbn/1400043395-M.jpg",
-    "The Picture of Dorian Gray": "https://covers.openlibrary.org/b/isbn/0141439572-M.jpg",
-    "East of Eden": "https://covers.openlibrary.org/b/isbn/0142004235-M.jpg",
-    "A Breath of Life": "https://covers.openlibrary.org/b/isbn/0811219895-M.jpg",
-    "Giovanni's Room": "https://covers.openlibrary.org/b/isbn/0375701877-M.jpg",
-    "Thinking, Fast and Slow": "https://covers.openlibrary.org/b/isbn/9780374533557-M.jpg",
-    "Just Kids": "https://covers.openlibrary.org/b/isbn/9780060936228-M.jpg",
-    "Sula": "https://covers.openlibrary.org/b/isbn/1400033438-M.jpg",
-    "The Invisible Life of Addie LaRue": "https://covers.openlibrary.org/b/isbn/0765387565-M.jpg",
-    "Normal People": "https://covers.openlibrary.org/b/isbn/9781984822178-M.jpg",
-    "Devotions": "https://books.google.com/books/content?vid=ISBN9780399563249&printsec=frontcover&img=1&zoom=1",
-    "Walden": "https://covers.openlibrary.org/b/isbn/9780691096124-M.jpg",
-    "The Year of Magical Thinking": "/magical-thinking.jpg",
-    "The Book Thief": "https://covers.openlibrary.org/b/isbn/0375842209-M.jpg",
-    "All About Love": "https://covers.openlibrary.org/b/isbn/0060959479-M.jpg",
-    "White Nights": "https://covers.openlibrary.org/b/isbn/9780140449266-M.jpg",
-    "Atonement": "https://covers.openlibrary.org/b/isbn/9780385721790-M.jpg",
-    "The Secret History": "https://covers.openlibrary.org/b/isbn/1400031702-M.jpg",
-  };
+    var COVERS = {
+      "Never Let Me Go": "https://covers.openlibrary.org/b/isbn/1400043395-M.jpg",
+      "The Picture of Dorian Gray": "https://covers.openlibrary.org/b/isbn/0141439572-M.jpg",
+      "East of Eden": "https://covers.openlibrary.org/b/isbn/0142004235-M.jpg",
+      "Giovanni's Room": "https://covers.openlibrary.org/b/isbn/0375701877-M.jpg",
+      "Thinking, Fast and Slow": "https://covers.openlibrary.org/b/isbn/9780374533557-M.jpg",
+      "Just Kids": "https://covers.openlibrary.org/b/isbn/9780060936228-M.jpg",
+      "Sula": "https://covers.openlibrary.org/b/isbn/1400033438-M.jpg",
+      "The Invisible Life of Addie LaRue": "https://covers.openlibrary.org/b/isbn/0765387565-M.jpg",
+      "Normal People": "https://covers.openlibrary.org/b/isbn/9781984822178-M.jpg",
+      "Devotions": "/devotions.jpg",
+      "Walden": "https://covers.openlibrary.org/b/isbn/9780691096124-M.jpg",
+      "The Year of Magical Thinking": "/magical-thinking.jpg",
+      "The Book Thief": "https://covers.openlibrary.org/b/isbn/0375842209-M.jpg",
+      "All About Love": "https://covers.openlibrary.org/b/isbn/0060959479-M.jpg",
+      "White Nights": "https://covers.openlibrary.org/b/isbn/9780140449266-M.jpg",
+      "Atonement": "https://covers.openlibrary.org/b/isbn/9780385721790-M.jpg",
+      "The Secret History": "https://covers.openlibrary.org/b/isbn/1400031702-M.jpg",
+    };
 
-  const track = document.getElementById('marquee-track')!;
-  const all = [...FAVORITES, ...FAVORITES];
+    var track = document.getElementById('marquee-track');
+    if (!track) return;
+    var t = track;
 
-  all.forEach(({ title, author }) => {
-    const cover = COVERS[title] ?? '';
-    const item = document.createElement('div');
-    item.style.cssText = 'flex-shrink:0; width:90px; cursor:default;';
-    item.innerHTML = `
-      <div style="width:90px; height:130px; border-radius:4px; overflow:hidden; background:#f3f4f6; margin-bottom:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-        ${cover
-         ${cover ? `<img src="${cover}" alt="${title}" style="width:100%; height:100%; object-fit:cover;" loading="eager" onerror="this.parentElement.style.background='#e5e7eb'" />`
-          : `<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:8px;font-size:9px;text-align:center;color:#9ca3af;">${title}</div>`
-        }
-      </div>
-      <p style="font-size:10px; font-weight:500; line-height:1.3; margin:0; opacity:0.8;">${title}</p>
-      <p style="font-size:9px; opacity:0.45; margin:2px 0 0;">${author}</p>
-    `;
-    track.appendChild(item);
-  });
+    var all = FAVORITES.concat(FAVORITES);
+    all.forEach(function (book) {
+      var cover = COVERS[book.title] || '';
+      var item = document.createElement('div');
+      item.style.cssText = 'flex-shrink:0; width:90px; cursor:default;';
+      var imgHtml = cover
+        ? '<img src="' + cover + '" alt="' + book.title + '" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.style.background=\'#e5e7eb\'" />'
+        : '<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:8px;font-size:9px;text-align:center;color:#9ca3af;">' + book.title + '</div>';
+      item.innerHTML =
+        '<div style="width:90px; height:130px; border-radius:4px; overflow:hidden; background:#f3f4f6; margin-bottom:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">' +
+        imgHtml +
+        '</div>' +
+        '<p style="font-size:10px; font-weight:500; line-height:1.3; margin:0; opacity:0.8;">' + book.title + '</p>' +
+        '<p style="font-size:9px; opacity:0.45; margin:2px 0 0;">' + book.author + '</p>';
+      t.appendChild(item);
+    });
 
-  let x = 0;
-  let paused = false;
-  const speed = 0.5;
+    var x = 0;
+    var paused = false;
+    var speed = 0.5;
 
-  track.addEventListener('mouseenter', () => { paused = true; });
-  track.addEventListener('mouseleave', () => { paused = false; });
+    t.addEventListener('mouseenter', function () { paused = true; });
+    t.addEventListener('mouseleave', function () { paused = false; });
 
-  function animate() {
-    if (!paused) {
-      x -= speed;
-      const half = track.scrollWidth / 2;
-      if (Math.abs(x) >= half) x = 0;
-      track.style.transform = `translateX(${x}px)`;
+    function animate() {
+      if (!paused) {
+        x -= speed;
+        var half = t.scrollWidth / 2;
+        if (Math.abs(x) >= half) x = 0;
+        t.style.transform = 'translateX(' + x + 'px)';
+      }
+      requestAnimationFrame(animate);
     }
-    requestAnimationFrame(animate);
-  }
-  animate();
+    animate();
+  })();
 </script>
 
 <script>
@@ -197,45 +196,25 @@ const BOOKS = [
   async function render() {
     const width = container.clientWidth;
     const height = width * 0.5;
-
     container.innerHTML = "";
-
-    const svg = d3
-      .select(container)
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height);
-
+    const svg = d3.select(container).append("svg").attr("width", width).attr("height", height);
     if (!geoData) {
       const response = await fetch("/world.geojson");
       geoData = await response.json();
     }
-
     const projection = d3.geoNaturalEarth1().fitSize([width, height], geoData);
     const path = d3.geoPath().projection(projection);
-
-    svg
-      .selectAll("path")
-      .data(geoData.features)
-      .join("path")
+    svg.selectAll("path").data(geoData.features).join("path")
       .attr("d", path as any)
-      .attr("fill", (d: any) =>
-        bookMap.has(d.properties.name) ? "#ffffff" : "#1a1a1a"
-      )
+      .attr("fill", (d: any) => bookMap.has(d.properties.name) ? "#ffffff" : "#1a1a1a")
       .attr("stroke", "none")
-      .style("filter", (d: any) =>
-        bookMap.has(d.properties.name)
-          ? "drop-shadow(0 0 6px rgba(255,255,255,0.4))"
-          : "none"
-      )
-      .style("cursor", (d: any) =>
-        bookMap.has(d.properties.name) ? "pointer" : "default"
-      )
+      .style("filter", (d: any) => bookMap.has(d.properties.name) ? "drop-shadow(0 0 6px rgba(255,255,255,0.4))" : "none")
+      .style("cursor", (d: any) => bookMap.has(d.properties.name) ? "pointer" : "default")
       .on("mouseenter", function (_event: MouseEvent, d: any) {
         const book = bookMap.get(d.properties.name);
         if (!book) return;
         tooltip.style.display = "block";
-        tooltip.innerHTML = `<strong>${book.country}</strong><br/>${book.title}<br/><em>${book.author}</em>`;
+        tooltip.innerHTML = '<strong>' + book.country + '</strong><br/>' + book.title + '<br/><em>' + book.author + '</em>';
       })
       .on("mousemove", function (event: MouseEvent) {
         tooltip.style.left = event.clientX + 12 + "px";
