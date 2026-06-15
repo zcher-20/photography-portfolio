@@ -1,0 +1,117 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { identity } from "../config";
+---
+
+<Layout
+  seo={{
+    title: "Photography | " + identity.name,
+    description: "Photography by Zayneb Cherif.",
+    image: identity.logo,
+  }}
+>
+  <div id="photo-trail-container" style="width:100vw; height:100vh; position:fixed; top:0; left:0; overflow:hidden; background:#fff; cursor:none;">
+    <h1 id="album-title" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:clamp(3rem,10vw,8rem); font-weight:700; letter-spacing:-0.03em; color:#111; pointer-events:none; z-index:10; white-space:nowrap; transition: opacity 0.3s;">Photography</h1>
+  </div>
+</Layout>
+
+<style is:global>
+  /* Hide the site nav padding since this is full screen */
+  #photo-trail-container ~ * { display: none; }
+  body { overflow: hidden; }
+</style>
+
+<script>
+  const PHOTOS = [
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80",
+    "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&q=80",
+    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&q=80",
+    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=80",
+    "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=400&q=80",
+    "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=400&q=80",
+    "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&q=80",
+    "https://images.unsplash.com/photo-1504700610630-ac6aba3536d3?w=400&q=80",
+    "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400&q=80",
+    "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&q=80",
+    "https://images.unsplash.com/photo-1510784722466-f2aa240d2699?w=400&q=80",
+    "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=400&q=80",
+  ];
+
+  const container = document.getElementById('photo-trail-container');
+  const title = document.getElementById('album-title');
+  if (!container || !title) throw new Error('missing elements');
+
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let lastX = mouseX;
+  let lastY = mouseY;
+  let photoIndex = 0;
+  let threshold = 80;
+  let distAccum = 0;
+  let isMoving = false;
+  let moveTimeout: ReturnType<typeof setTimeout>;
+
+  container.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    const dx = mouseX - lastX;
+    const dy = mouseY - lastY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    distAccum += dist;
+
+    isMoving = true;
+    title.style.opacity = '0.08';
+    clearTimeout(moveTimeout);
+    moveTimeout = setTimeout(() => {
+      isMoving = false;
+      title.style.opacity = '1';
+    }, 1500);
+
+    if (distAccum >= threshold) {
+      distAccum = 0;
+      spawnPhoto(mouseX, mouseY);
+    }
+
+    lastX = mouseX;
+    lastY = mouseY;
+  });
+
+  function spawnPhoto(x: number, y: number) {
+    const img = document.createElement('img');
+    img.src = PHOTOS[photoIndex % PHOTOS.length];
+    photoIndex++;
+
+    const w = 120 + Math.random() * 60;
+    const h = w * (0.65 + Math.random() * 0.5);
+    const rotate = (Math.random() - 0.5) * 20;
+
+    img.style.cssText = `
+      position: absolute;
+      left: ${x - w / 2}px;
+      top: ${y - h / 2}px;
+      width: ${w}px;
+      height: ${h}px;
+      object-fit: cover;
+      border-radius: 2px;
+      pointer-events: none;
+      transform: rotate(${rotate}deg) scale(0.8);
+      opacity: 0;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 5;
+    `;
+
+    container.appendChild(img);
+
+    requestAnimationFrame(() => {
+      img.style.opacity = '1';
+      img.style.transform = `rotate(${rotate}deg) scale(1)`;
+    });
+
+    setTimeout(() => {
+      img.style.opacity = '0';
+      img.style.transform = `rotate(${rotate}deg) scale(1.1)`;
+      setTimeout(() => img.remove(), 500);
+    }, 1800);
+  }
+</script>
