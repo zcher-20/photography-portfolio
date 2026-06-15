@@ -127,15 +127,15 @@ posts.splice(3)
 
   let x = 0;
   let paused = false;
-  track.addEventListener('mouseenter', () => { paused = true; });
-  track.addEventListener('mouseleave', () => { paused = false; });
+  track?.addEventListener('mouseenter', () => { paused = true; });
+  track?.addEventListener('mouseleave', () => { paused = false; });
 
   function animate() {
     if (!paused) {
       x -= 0.5;
-      const half = track.scrollWidth / 2;
-      if (Math.abs(x) >= half) x = 0;
-      track.style.transform = `translateX(${x}px)`;
+      const half = (track?.scrollWidth ?? 0) / 2;
+     if (Math.abs(x) >= half) x = 0;
+     if (track) track.style.transform = `translateX(${x}px)`;
     }
     requestAnimationFrame(animate);
   }
