@@ -5,25 +5,34 @@ import {marked} from "marked"
 
 type Props = Project;
 
-const { title, description, image, year, url, demoUrl } = Astro.props;
-
-const htmlDescription = marked.parse(description)
+const { title, description, image, year, url, demoUrl, pdfUrl } = Astro.props;
+const htmlDescription = marked.parse(description);
+const cardId = Math.random().toString(36).slice(2, 8);
 ---
 
 <div class="sm:py-5 py-10 flex flex-col sm:flex-row gap-6 group-hover:opacity-60 hover:!opacity-100 transition-opacity">
-  <a
-    href={url}
-    target="_blank"
-    class="h-full bg-gray-200 dark:bg-gray-700 rounded-lg aspect-video sm:h-[150px] block"
+  <div
+    id={`trigger-${cardId}`}
+    class="h-full bg-gray-200 dark:bg-gray-700 rounded-lg aspect-video sm:h-[150px] block overflow-hidden cursor-zoom-in flex-shrink-0"
+    style="min-width:200px;"
   >
-    <Image
-      width={1920}
-      height={1080}
-      src={image}
-      alt={title}
-      class="w-full h-full object-cover rounded-lg aspect-video"
-    />
-  </a>
+    {pdfUrl ? (
+      <div class="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-lg">
+        <div class="text-center opacity-50">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <p style="font-size:11px; margin-top:6px;">Click to view PDF</p>
+        </div>
+      </div>
+    ) : (
+      <Image
+        width={1920}
+        height={1080}
+        src={image}
+        alt={title}
+        class="w-full h-full object-cover rounded-lg aspect-video"
+      />
+    )}
+  </div>
   <div class="flex-1">
     <div class="flex items-center gap-1 mb-2">
       <a href={url} target="_blank" class="hover:underline">
@@ -36,15 +45,151 @@ const htmlDescription = marked.parse(description)
       {demoUrl && (
         <span>
           {" "}
-          <a
-            href={demoUrl}
-            target="_blank"
-            class="text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 underline"
-          >
-See demo
+          <a href={demoUrl} target="_blank" class="text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 underline">
+            See demo
           </a>
         </span>
       )}
     </div>
   </div>
 </div>
+
+<!-- Lightbox -->
+<div
+  id={`lightbox-${cardId}`}
+  style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:9999; align-items:center; justify-content:center;"
+>
+  <!-- Card -->
+  <div
+    id={`card-${cardId}`}
+    style="position:relative; width:min(90vw,920px); height:85vh; background:#fff; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,0.5);"
+    onclick="event.stopPropagation()"
+  >
+    <!-- Close button -->
+    <button
+      id={`close-${cardId}`}
+      style="position:absolute; top:12px; right:14px; z-index:10; background:rgba(0,0,0,0.12); border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; color:#333;"
+    >✕</button>
+
+    {pdfUrl ? (
+      <!-- PDF slideshow -->
+      <div style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+        <!-- Canvas area -->
+        <div style="flex:1; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#f5f5f5; padding:16px;">
+          <canvas id={`pdf-canvas-${cardId}`} style="max-width:100%; max-height:100%; object-fit:contain; box-shadow:0 4px 20px rgba(0,0,0,0.15);"></canvas>
+        </div>
+        <!-- Controls -->
+        <div style="height:56px; display:flex; align-items:center; justify-content:center; gap:24px; border-top:1px solid #eee; flex-shrink:0; background:#fff;">
+          <button id={`prev-${cardId}`} style="background:none; border:1px solid #ddd; border-radius:6px; padding:6px 16px; cursor:pointer; font-size:14px; color:#444;">←</button>
+          <span id={`page-info-${cardId}`} style="font-size:13px; opacity:0.5; min-width:60px; text-align:center;">1 / ?</span>
+          <button id={`next-${cardId}`} style="background:none; border:1px solid #ddd; border-radius:6px; padding:6px 16px; cursor:pointer; font-size:14px; color:#444;">→</button>
+        </div>
+      </div>
+    ) : (
+      <!-- Image view -->
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:16px; background:#fff; overflow:hidden;">
+        <img
+          src={image}
+          alt={title}
+          style="max-width:100%; max-height:100%; object-fit:contain;"
+        />
+      </div>
+    )}
+  </div>
+</div>
+
+<script define:vars={{ cardId, pdfUrl }}>
+  const trigger  = document.getElementById('trigger-' + cardId);
+  const lightbox = document.getElementById('lightbox-' + cardId);
+  const closeBtn = document.getElementById('close-' + cardId);
+
+  function openLightbox() {
+    lightbox.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    if (pdfUrl) initPdf();
+  }
+
+  function closeLightbox() {
+    lightbox.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  trigger?.addEventListener('click', openLightbox);
+  lightbox?.addEventListener('click', closeLightbox);
+  closeBtn?.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+
+  document.addEventListener('keydown', (e) => {
+    if (lightbox?.style.display === 'flex') {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight' && pdfUrl) nextPage();
+      if (e.key === 'ArrowLeft' && pdfUrl) prevPage();
+    }
+  });
+
+  // PDF.js slideshow
+  let pdfDoc = null;
+  let currentPage = 1;
+  let rendering = false;
+  let pdfInitialized = false;
+
+  async function initPdf() {
+    if (pdfInitialized) return;
+    pdfInitialized = true;
+
+    // Load PDF.js via script tag
+    await new Promise<void>((resolve) => {
+      if ((window as any).pdfjsLib) { resolve(); return; }
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      script.onload = () => resolve();
+      document.head.appendChild(script);
+    });
+
+    const pdfjsLib = (window as any).pdfjsLib;
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
+    updatePageInfo();
+    renderPage(1);
+  }
+
+  function updatePageInfo() {
+    const info = document.getElementById('page-info-' + cardId);
+    if (info && pdfDoc) info.textContent = currentPage + ' / ' + pdfDoc.numPages;
+  }
+
+  async function renderPage(num) {
+    if (!pdfDoc || rendering) return;
+    rendering = true;
+    const page = await pdfDoc.getPage(num);
+    const canvas = document.getElementById('pdf-canvas-' + cardId);
+    const container = canvas.parentElement;
+    const scale = Math.min(
+      (container.clientWidth - 32) / page.getViewport({ scale: 1 }).width,
+      (container.clientHeight - 32) / page.getViewport({ scale: 1 }).height
+    );
+    const viewport = page.getViewport({ scale });
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    rendering = false;
+    updatePageInfo();
+  }
+
+  function nextPage() {
+    if (pdfDoc && currentPage < pdfDoc.numPages) {
+      currentPage++;
+      renderPage(currentPage);
+    }
+  }
+
+  function prevPage() {
+    if (pdfDoc && currentPage > 1) {
+      currentPage--;
+      renderPage(currentPage);
+    }
+  }
+
+  document.getElementById('next-' + cardId)?.addEventListener('click', (e) => { e.stopPropagation(); nextPage(); });
+  document.getElementById('prev-' + cardId)?.addEventListener('click', (e) => { e.stopPropagation(); prevPage(); });
+</script>

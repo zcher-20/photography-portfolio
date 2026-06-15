@@ -82,6 +82,7 @@ export type Project = {
   year?: string;
   url: string;
   demoUrl?: string;
+  pdfUrl?: string;
 };
 
 export type ProjectPageContent = {

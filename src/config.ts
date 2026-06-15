@@ -11,9 +11,9 @@ import type {
 } from "./types/config";
 
 export const identity: Identity = {
-  name: "Anika Somaia",
-  logo: "/logo.webp",
-  email: "anika.somaia@columbia.edu",
+  name: "Zayneb Cherif",
+  logo: "/photo.png",
+  email: "zaynebcheriff@gmail.com",
 };
 
 export const navBarLinks: NavBarLink[] = [
@@ -29,9 +29,9 @@ export const navBarLinks: NavBarLink[] = [
     title: "Projects",
     url: "/projects",
   },
-  {
-    title: "Blog",
-    url: "/blog",
+{
+    title: "Mind",
+    url: "/mind",
   },
   {
     title: "Bookshelf",
@@ -42,25 +42,19 @@ export const navBarLinks: NavBarLink[] = [
 export const socialLinks: SocialLink[] = [
   {
     title: "GitHub",
-    url: "https://github.com/anikasomaia",
+    url: "https://github.com/zcher-20",
     icon: "mdi:github",
     external: true,
   },
   {
-    title: "Linkedin",
-    url: "https://www.linkedin.com/in/anika-somaia/",
+    title: "LinkedIn",
+    url: "https://www.linkedin.com/in/zayneb-cherif-830294251/",
     icon: "mdi:linkedin",
     external: true,
   },
   {
-    title: "X",
-    url: "https://x.com/anikasomaia",
-    icon: "x",
-    external: true,
-  },
-  {
     title: "Mail",
-    url: "mailto:anika.somaia@columbia.edu",
+    url: "mailto:zaynebcheriff@gmail.com",
     icon: "mdi:email",
     external: true,
   },
@@ -69,14 +63,14 @@ export const socialLinks: SocialLink[] = [
 // Home (/)
 export const homePageContent: HomePageContent = {
   seo: {
-    title: "Anika Somaia",
+    title: "Zayneb Cherif",
     description:
-      "Columbia student interested in ML, math and building.",
+      "Columbia CS & Design student building at the intersection of AI research and thoughtful software.",
     image: identity.logo,
   },
-  role: "Student, researcher, occasionally writes code that works",
+  role: "CS & Design @ Columbia | AI Researcher & Developer",
   description:
-    "I'm Anika Somaia, a student from London and California who loves math, ML and building things.",
+    "I'm Zayneb Cherif, a Computer Science & Design student at Columbia University. I build AI systems, publish ML research, and design interfaces that make complex things feel simple.",
   socialLinks: socialLinks,
   links: [
     {
@@ -87,23 +81,23 @@ export const homePageContent: HomePageContent = {
       title: "Bookshelf",
       url: "/books",
     },
+    {
+      title: "Mind",
+      url: "/mind",
+    },
   ],
   currentlyReading: [
     {
-      title: "Chaos Monkeys",
-      author: "Antonio García Martínez",
+      title: "East of Eden",
+      author: "John Steinbeck",
     },
     {
-      title: "How Not to Be Wrong: The Power of Mathematical Thinking",
-      author: "Jordan Ellenberg",
+      title: "The Goldfinch",
+      author: "Donna Tartt",
     },
     {
-      title: "Surely You're Joking, Mr. Feynman!",
-      author: "Richard Feynman",
-    },
-    {
-      title: "The Bell Jar",
-      author: "Sylvia Plath",
+      title: "Just Kids",
+      author: "Patti Smith",
     },
   ],
 };
@@ -111,42 +105,45 @@ export const homePageContent: HomePageContent = {
 // About (/about)
 export const aboutPageContent: AboutPageContent = {
   seo: {
-    title: "About | Anika Somaia",
+    title: "About | Zayneb Cherif",
     description:
-      "Full time student from Germany who loves building cool things using code.",
+      "Columbia CS & Design student building at the intersection of AI research and thoughtful software.",
     image: identity.logo,
   },
   subtitle: "",
   about: {
     description: `
-I'm Anika Somaia, a software engineer intern at LangChain working on AI observability products and a Neo Scholar (2025 cohort). Previously, I worked on generative video models at Pika.
+I'm Zayneb Cherif, a B.A. Computer Science & Design student at Columbia University (Class of 2028), previously at NYU. I work at the intersection of AI research, full-stack engineering, and human-centered design.
 
 &nbsp;
 
-I'm currently on leave from Columbia University, where I study Computer Science and Math, serve as research lead at Columbia's AI Alignment Club, and play tennis. 
+My research spans analog in-memory computing, RAG systems, agentic AI pipelines, and quantum-classical ML — with publications at ICLR 2024 (Notable) and IJCAI 2024. On the engineering side I build everything from FastAPI backends and LLM applications to multimodal AI civic platforms.
 
 &nbsp;
 
-I also enjoy pretty much anything outdoors (especially snowboarding and kitesurfing) and traveling to new places.
+I speak English, Arabic, Italian, and Spanish, and I'm driven by the belief that the best technology is both rigorous and humane.
 
 &nbsp;
 
-<a href="/work" style="font-weight: bold; text-decoration: none; color: inherit;">Learn more →</a> 
-`
-, // Markdown is supported
+Recognized at ICLR 2024 (Notable), IBM/IEEE AICS 2023, Best Research Award at the University of Sharjah, Genius Olympiad Finalist, and WESEF Finalist.
+
+&nbsp;
+
+<a href="/work" style="font-weight: bold; text-decoration: none; color: inherit;">Learn more →</a>
+`,
     image_l: {
-      url: "/langchain2.webp",
-      alt: "LangChain",
-      link: "https://langchain.com",
+      url: "/openai.webp",
+      alt: "OpenAI",
+      link: "https://openai.com",
     },
     image_r: {
-      url: "/neo.webp",
-      alt: "Neo Scholar",
-      link: "https://neo.com",
+      url: "/ibm.webp",
+      alt: "IBM Research",
+      link: "https://research.ibm.com",
     },
   },
   connect: {
-    description: `You can reach out to me at <a href="mailto:anika.somaia@columbia.edu" style="font-weight: bold; text-decoration: none; color: inherit;">anika.somaia@columbia.edu</a>.`, // Markdown is supported
+    description: `You can reach out to me at <a href="mailto:zaynebcheriff@gmail.com" style="font-weight: bold; text-decoration: none; color: inherit;">zaynebcheriff@gmail.com</a>.`,
     links: [],
   },
 };
@@ -154,42 +151,48 @@ I also enjoy pretty much anything outdoors (especially snowboarding and kitesurf
 // Projects (/projects)
 export const projectsPageContent: ProjectPageContent = {
   seo: {
-    title: "Projects | Anika Somaia",
-    description: "Check out what I've been working on.",
+    title: "Projects | Zayneb Cherif",
+    description: "AI research, full-stack apps, and systems that push the edge.",
     image: identity.logo,
   },
-  subtitle: "Check out what I've been working on.",
+  subtitle: "AI research, full-stack apps, and systems that push the edge.",
   projects: [
     {
-      title: "Producer",
-      description: "A workspace to co-write lyrics and produce music alongside AI. Coaches lyrics in real time with client-side analysis, then an autonomous agent arranges and refines them into a finished track. Built at TreeHacks 2026.",
-      image: "/producer.png",
-      url: "https://github.com/anikasomaia/producer",
+      title: "Multi-Agent Investment Research System",
+      description:
+        "5-agent LLM pipeline on Azure AI Foundry — Research, Financial Analysis, Risk, News, and Memo agents producing a full investment thesis from a single stock ticker. Microsoft Agents League Hackathon.",
+      image: "/project-investment.jpg",
+      url: "https://github.com/zcher-20",
     },
     {
-      title: "Noon",
-      description: "A voice-powered calendar scheduling assistant. Users interact with Google Calendar through natural language voice commands, processed by a LangGraph agent. Built with Swift, FastAPI, and Supabase. Built at Neo's hackathon.",
-      image: "/noon.png",
-      url: "https://github.com/anikasomaia/noon",
+      title: "RICER — AI Forest Fire Risk Prediction",
+      description:
+        "ML models for wildfire risk assessment in Morocco using satellite imagery, GIS, and Earth Observation data. Built with Al Akhawayn University Digital Innovation Lab.",
+      image: "/project-ricer.jpg",
+      url: "https://github.com/zcher-20",
     },
     {
-      title: "LLM Evaluation Uncertainty",
-      description: "Conformal prediction for LLM-as-judge systems to quantify evaluation uncertainty. Includes LLM-as-judge evaluation using Sonnet 4, multiple conformal prediction strategies, and interactive visualization for uncertainty quantification.",
-      image: "/project3.jpg",
-      url: "https://www.notion.so/Quantifying-LLM-Evaluation-Uncertainty-23e808527b1780649908c417cc1f6fd9?source=copy_link",
+      title: "Hybrid Quantum-Classical Medical Image Segmentation",
+      description:
+        "Hybrid quantum-classical U-Net replacing the CNN bottleneck with a 4-qubit PennyLane variational circuit. 95% IoU at 60% fewer parameters (2M vs 5M). NYU Abu Dhabi Hackathon — Quantum Track.",
+      image: "/project-quantum.jpg",
+      url: "https://github.com/zcher-20",
     },
     {
-      title: "Local Activity Recorder for Computer-Use Modeling",
-      description: "A lightweight recorder that logs everyday computer use (keyboard, screen, mouse events) as structured traces for computer-use agent development.",
-      image: "/project2.jpg",
-      url: "https://dropbox.com/scl/fi/7w8dt2uq9rjto7h32iq0w/ActivityRecorderProject.zip?rlkey=e8rpa2z23limxn09kg51mj0a7&st=r2g4fu02&dl=0",
-      demoUrl: "https://www.dropbox.com/scl/fi/d7skn5sj7i1gfwa8yex27/ActivityRecorder-Demo.mp4?rlkey=4bezm8kkyc1sji8prb8ws5tnw&e=1&st=l4gjm56v&dl=0",
+      title: "Analog In-Memory Computing with Uncertainty Quantification for Edge Medical Imaging",
+      description:
+        "Published at ICLR 2024 (Notable). Designed and benchmarked a deep learning inference pipeline on IBM analog in-memory computing hardware for medical image segmentation at the edge, with uncertainty quantification methods to measure prediction reliability.",
+      image: "/project-aimc.jpg",
+      year: "2024",
+      url: "https://arxiv.org/search/?searchtype=author&query=Cherif+Z",
     },
     {
-      title: "Lightweight eBPF Runtime for SmallSat Operations",
-      description: "Research on novel runtime systems for multi-tenant satellite operations using eBPF. Addresses the challenges of managing hundreds of commodity SmallSats under intermittent communication. Published at ACM HotNets '25.",
-      image: "/project4.jpg",
-      url: "https://hotnets25.hotcrp.com/doc/hotnets25-paper142.pdf?cap=hcav142dbJcQUYfioxkLUtMxBWhEDhC",
+      title: "Medical Neural Architecture Search: Survey and Taxonomy",
+      description:
+        "Published at IJCAI 2024, pp. 7932–7940. Co-authored a comprehensive survey and taxonomy of Neural Architecture Search methods in medical imaging, systematically categorizing 100+ papers. Presented to 200+ researchers at IBM/IEEE AICS 2023.",
+      image: "/project-survey.jpg",
+      year: "2024",
+      url: "https://www.ijcai.org/proceedings/2024/877",
     },
   ],
 };
@@ -197,72 +200,142 @@ export const projectsPageContent: ProjectPageContent = {
 // Work (/work)
 export const workPageContent: WorkPageContent = {
   seo: {
-    title: "Work | Anika Somaia",
-    description: "My work experience and professional journey.",
+    title: "Work | Zayneb Cherif",
+    description: "My experience across AI research labs, startups, and enterprise teams.",
     image: identity.logo,
   },
   subtitle: "My professional journey and work experience.",
-  description: `I've worked across research, education, and industry, focusing on AI safety, machine learning, and software engineering.`,
+  description: `I've worked across AI research labs, startups, and enterprise teams — building systems that range from analog hardware benchmarks to production RAG pipelines.`,
   items: [
     {
-      title: "Software Engineer",
+      title: "AI Model Trainer — Codex / Project Vox",
       company: {
-        name: "LangChain",
-        image: "/langchain.webp",
-        url: "https://www.langchain.com/langsmith",
+        name: "OpenAI",
+        image: "/openai.webp",
+        url: "https://openai.com",
       },
-      date: "Jun 2025 - Present",
-      description: "Observability and evals. Learn more →",
+      date: "Jun 2026 - Present",
+      description:
+        "Training Codex by crafting targeted prompts and adversarial edge-case sets; providing structured feedback to improve code generation, reasoning, and instruction-following capabilities.",
     },
     {
-      title: "Research Assistant - ARISE Lab",
+      title: "Advanced AI Extern",
       company: {
-        name: "Columbia University",
+        name: "Pfizer",
+        image: "/pfizer.svg",
+        url: "https://pfizer.com",
+      },
+      date: "Jun 2026 - Present",
+      description:
+        "Building intelligent document processing pipelines with Python and layout-aware OCR; developing RAG systems for enterprise document search; prototyping an internal AI chatbot using Gradio.",
+    },
+    {
+      title: "Agentic AI & ML Intern",
+      company: {
+        name: "MIT-Incubated Stealth AI Startup",
+        image: "/startup.webp",
+        url: "#",
+      },
+      date: "Jun - Aug 2026",
+      description:
+        "Building RAG pipelines with FAISS, LangChain, and LlamaIndex; developing FastAPI backend services for document ingestion and semantic search across SharePoint and SQL data sources.",
+    },
+    {
+      title: "AI / ML Research Intern",
+      company: {
+        name: "Al Akhawayn University",
+        image: "/akhawayn.png",
+        url: "https://www.aui.ma",
+      },
+      date: "Jul 2026",
+      description:
+        "Conducting AI/ML research as part of a competitive remote internship, applying machine learning methods to structured research problems under faculty supervision.",
+    },
+    {
+      title: "Career Fellow — Tech / SWE Track",
+      company: {
+        name: "SEO (Sponsors for Educational Opportunity)",
+        image: "/seo.jpg",
+        url: "https://seofellows.org",
+      },
+      date: "2026 - Present",
+      description:
+        "Selected for SEO's competitive Career Fellowship; receiving mentorship, technical interview preparation, and recruiting support targeting top-tier SWE roles.",
+    },
+    {
+      title: "Director of Development",
+      company: {
+        name: "Columbia General Studies Business Society",
         image: "/columbia.webp",
         url: "https://www.columbia.edu",
       },
-      date: "Jan 2025 - Jun 2025",
-      description: "Investigating why models fail on complex programming tasks under Prof. Baishakhi Ray. Built classifiers to distinguish between reasoning and output errors in AI systems.",
+      date: "Feb 2026 - Present",
+      description:
+        "Lead growth initiatives to expand engagement; built alumni and external partner pipeline for sponsorships and events.",
     },
     {
-      title: "Course Assistant",
+      title: "Student Researcher — HCI & Wearable Systems",
       company: {
-        name: "Columbia University CS",
-        image: "/cs@cu.webp",
-        url: "https://www.cs.columbia.edu",
+        name: "Cornell University — Hybrid Body Lab",
+        image: "/cornell.webp",
+        url: "https://cornell.edu",
       },
-      date: "Jan 2025 - Jun 2025",
-      description: "Led workshops on Natural Language Processing, Computer Vision, and Machine Learning for 100+ students in an applied AI course.",
+      date: "Mar 2026",
+      description:
+        "Prototyped modular flexible PCB wearables for continuous physiological monitoring, applying embedded hardware and HCI design principles to on-body interaction applications.",
     },
     {
-      title: "Technical Fellow",
+      title: "Data Analytics Research Intern",
       company: {
-        name: "Columbia AI Alignment Club",
-        image: "/caiac.webp",
-        url: "https://www.columbia.edu",
+        name: "New York University",
+        image: "/nyu.webp",
+        url: "https://nyu.edu",
       },
-      date: "Jan 2025 - Jun 2025",
-      description: "Conceived and developed a novel mathematical framework and benchmark dataset for detecting cumulative risk in AI agents, securing Open Philanthropy funding.",
+      date: "Oct - Dec 2025",
+      description:
+        "Built end-to-end ML classification pipelines in scikit-learn processing 500K+ records; applied STL time-series decomposition to denoise sensor signals and improve downstream model F1 score.",
     },
     {
-      title: "Product and Research Intern",
+      title: "AI Analytics Researcher",
       company: {
-        name: "Pika",
-        image: "/pika.webp",
-        url: "https://pika.art",
+        name: "IBM Research",
+        image: "/ibm.webp",
+        url: "https://research.ibm.com",
       },
-      date: "Jul 2024 - Jan 2025",
-      description: "Fine-tuned image-to-video models at a generative video company. Built software to automate video pre-processing workflows and researched alternative training pipelines.",
+      date: "Sep 2023 - May 2024",
+      description:
+        "Co-authored 2 peer-reviewed papers (ICLR 2024 Notable, IJCAI 2024); benchmarked ResNet and U-Net inference on IBM analog in-memory computing chips across 6 hardware configurations.",
+    },
+    {
+      title: "Mind Brain Behavior Mentorship",
+      company: {
+        name: "Harvard University",
+        image: "/harvard.svg",
+        url: "https://mbb.harvard.edu",
+      },
+      date: "Sep 2021 - Jun 2023",
+      description:
+        "Apprenticeship under the Mind Brain Behavior Interfaculty Initiative; conducted research bridging neuroscience and behavioral science under faculty mentorship.",
+    },
+    {
+      title: "Research Analyst",
+      company: {
+        name: "Boston Children's Hospital",
+        image: "/bch.webp",
+        url: "https://research.childrenshospital.org",
+      },
+      date: "Sep 2021 - May 2023",
+      description:
+        "Analyzed behavioral and clinical datasets at the Arnett Lab; cleaned and validated study records; independently authored a research paper under faculty mentorship.",
     },
   ],
 };
-
 // Blog (/blog)
 export const blogPageContent: BlogPageContent = {
   seo: {
-    title: "Blog | Anika Somaia",
-    description: "Thoughts, stories and ideas.",
+    title: "Blog | Zayneb Cherif",
+    description: "Thoughts on AI, research, design, and building things.",
     image: identity.logo,
   },
-  subtitle: "Thoughts, stories and ideas.",
+  subtitle: "Thoughts on AI, research, design, and building things.",
 };

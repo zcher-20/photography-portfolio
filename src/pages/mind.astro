@@ -1,0 +1,380 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { identity } from "../config";
+
+const CLUSTERS = [
+  { id: "epistemology", label: "Epistemology", note: "Ideas about truth, models, and what it means to know something. What does it mean for a system to be wrong? To be uncertain? To confabulate? These questions sit underneath every AI system ever built." },
+  { id: "art", label: "Art & Systems", note: "The structural similarities between creative work and systems design. Constraints, taste, improvisation, and the willingness to throw things away — these aren't soft ideas. They're engineering principles." },
+  { id: "science", label: "Science & Beauty", note: "The places where mathematics becomes aesthetic. Hilbert space, analog noise, the unreasonable effectiveness of math — moments where rigorous thinking opens into something that feels like wonder." },
+  { id: "literature", label: "Literature & Tech", note: "Writers who were thinking about computation before computation existed. Borges, Lispector, Baldwin — their ideas about language, consciousness, and exile map onto AI in ways that feel less like metaphor and more like prophecy." },
+  { id: "culture", label: "Culture & Intelligence", note: "How language, place, and travel shape the way we think. Arabic root systems, Morocco's infrastructure, Bourdain's method — intelligence is always situated. It comes from somewhere." },
+  { id: "future", label: "The Future", note: "Open questions I can't stop thinking about. Who owns a model's opinions? What does trust mean for an agentic system? Does embodiment matter for intelligence? I don't have answers. That's the point." },
+  { id: "body", label: "The Body", note: "Wearables, physiological data, on-skin design, the politics of health tech. The body is the original interface — everything else is an abstraction of it. Building for the body forces you to confront constraints that screen-based design lets you ignore." },
+  { id: "memory", label: "Memory & Time", note: "How models forget, how humans misremember, what it means to archive vs. to remember. Memory is not storage. It's reconstruction. Every time you recall something, you're rewriting it. LLMs have no episodic memory at all — and that's a stranger fact than it first appears." },
+  { id: "power", label: "Power & Access", note: "Who gets to build AI, who gets to use it, and who gets built for. Open source vs. closed, the geopolitics of compute, algorithmic colonialism. The infrastructure of intelligence is not neutral. It encodes the priorities of whoever funded it." },
+  { id: "math-language", label: "Mathematics as Language", note: "Proof as narrative, notation as design, the aesthetics of formalism. Mathematics is the only language that means exactly what it says — and yet mathematicians argue about what proofs are for, what elegance means, whether beauty is evidence of truth." },
+  { id: "consciousness", label: "Consciousness", note: "The hard problem, what attention mechanisms don't explain, qualia and gradients. We can describe every physical process in the brain and still not explain why there is something it is like to be you. AI forces this question into engineering. We're building systems we don't understand, for reasons we can't fully articulate." },
+];
+
+const NODES = [
+  // Epistemology
+  { id: "hallucinations", label: "AI Hallucinations", cluster: "epistemology", note: "A model that confabulates is not lying — it has no relationship with truth at all. That's a different problem than error. Error implies a standard being missed. Hallucination implies the standard was never consulted. This distinction matters enormously for how we design systems that are supposed to be trusted." },
+  { id: "confabulation", label: "Confabulation vs. Lying", cluster: "epistemology", note: "Confabulation is a neurological term — patients who confabulate aren't deceiving, they're filling gaps with plausible-sounding content and believing it. LLMs do this structurally. The question isn't how to stop them from lying. It's how to give them a relationship with truth in the first place." },
+  { id: "map-territory", label: "The Map Is Not the Territory", cluster: "epistemology", note: "Korzybski's insight: the model of a thing is not the thing. This applies to embeddings, to benchmarks, to maps of countries, and to how we talk about intelligence. Every abstraction is a lossy compression. The question is always: what did we lose?" },
+  { id: "unknown-unknowns", label: "What Models Don't Know", cluster: "epistemology", note: "Uncertainty quantification is really a question about self-knowledge. Does the model know what it doesn't know? Calibration — the alignment between confidence and accuracy — might be more important than raw performance for systems deployed in high-stakes contexts." },
+  // Art
+  { id: "startup-as-art", label: "Startup as Art", cluster: "art", note: "A good startup and a good artwork share a structure: a strong point of view, constraints that force creativity, and the willingness to throw away what isn't working. The difference is that startups have to convince others their taste is correct. Art gets to simply assert it." },
+  { id: "bourdain", label: "Bourdain's Philosophy", cluster: "art", note: "Bourdain's method was epistemic: show up somewhere with no agenda, eat what's in front of you, let the place teach you its logic. Don't impose a framework — observe until one emerges. I think about this constantly when building for contexts outside Silicon Valley. Arrive humble. Leave changed." },
+  { id: "jazz", label: "Jazz & Improvisation", cluster: "art", note: "Jazz is structure that enables freedom, not the absence of structure. Miles Davis couldn't have improvised without knowing exactly what he was departing from. I think about this when designing agentic systems — the constraint isn't the enemy of creativity. It's what makes creativity legible." },
+  { id: "constraints", label: "The Discipline of Constraints", cluster: "art", note: "Constraints are generative. Haiku, the sonnet, the three-act structure — forms that feel limiting produce work that feels inevitable. In engineering: APIs, type systems, component contracts. In life: choosing what not to do. The constraint is the creative act." },
+  // Science
+  { id: "hilbert", label: "Hilbert Space", cluster: "science", note: "The geometry of quantum mechanics is so strange it becomes aesthetic. In Hilbert space, states are vectors, measurement collapses superposition, and entanglement is non-local correlation with no classical analogue. I built a variational quantum circuit inside a U-Net and couldn't stop thinking about how beautiful the math was — even when it wasn't working." },
+  { id: "analog-noise", label: "Analog Noise as Signal", cluster: "science", note: "When I benchmarked deep learning on IBM's analog chips, the noise wasn't just a problem to be managed — it was a physical property of computation itself. In digital systems we pretend noise doesn't exist. In analog, you have to make peace with uncertainty at the hardware level. There's something philosophically honest about that." },
+  { id: "math-effectiveness", label: "Unreasonable Effectiveness of Math", cluster: "science", note: "Wigner asked why mathematics, invented by humans for abstract reasons, keeps turning out to describe physical reality. I don't have an answer. But the question intensifies when you do ML: why should gradient descent on a loss landscape find anything meaningful at all? That it does feels like a miracle every time." },
+  { id: "superposition", label: "Superposition as Metaphor", cluster: "science", note: "A quantum system exists in multiple states until observed. I find this useful as a metaphor for creative and intellectual states: holding multiple contradictory ideas simultaneously until something forces a collapse into position. The premature collapse is the enemy of good thinking." },
+  // Literature
+  { id: "lispector-llm", label: "Lispector & LLM Generation", cluster: "literature", note: "Clarice Lispector's prose is stream of consciousness — one thought generating the next through association rather than logic. Reading Agua Viva, I kept thinking: this is what autoregressive generation actually looks like from the inside. Not retrieval of stored facts. Association, momentum, the next token that feels true." },
+  { id: "borges", label: "Borges & Infinite Libraries", cluster: "literature", note: "Borges imagined a library containing every possible book — most of them nonsense, a vanishingly small fraction meaningful. The latent space of a large language model is structurally similar: an enormous space of possible outputs, navigated by a prompt that tries to find the meaningful ones. Borges invented RAG in 1941." },
+  { id: "baldwin-exile", label: "Baldwin & Exile", cluster: "literature", note: "Baldwin left America for Paris to see it clearly. The outsider sees the system's assumptions because they were never inside them. I think about this in AI: the researchers most likely to notice what's wrong with a paradigm are the ones who arrived from elsewhere — different fields, different cultures, different problems." },
+  { id: "murakami-ritual", label: "Murakami & Ritual", cluster: "literature", note: "Murakami writes about running, cooking, listening to jazz — daily rituals as the scaffolding of creative life. Consistency isn't the enemy of inspiration; it's what makes inspiration possible. I think about this when I design systems: reliability and creativity aren't opposites. The reliable system is the one you can trust enough to push." },
+  // Culture
+  { id: "arabic-roots", label: "Arabic Root Systems", cluster: "culture", note: "Arabic builds meaning from triconsonantal roots — three letters that branch into entire semantic families. K-T-B: to write, a book, a library, a correspondence, a prescription. It's a different architecture of meaning than English. I think about this when I work with embeddings: what would it mean to encode semantic families rather than surface forms?" },
+  { id: "travel-priors", label: "Travel Rewires Priors", cluster: "culture", note: "Every time I arrive somewhere new, my model of the world updates. Not just facts — the prior itself shifts. What counts as normal, what counts as a problem, what counts as a solution. This is Bayesian updating at the level of worldview. It's why Bourdain's method wasn't just good television. It was good epistemology." },
+  { id: "morocco-infra", label: "Morocco & Infrastructure", cluster: "culture", note: "Building for Morocco means building for intermittent connectivity, mixed-language interfaces, contexts where trust in institutions is earned differently. My RICER project — wildfire prediction using satellite data — only makes sense if the outputs reach people who can act on them. The last mile is a design problem, not just an engineering one." },
+  { id: "multilingualism", label: "Multilingualism as Parallel Processing", cluster: "culture", note: "Speaking Arabic, Italian, English, and Spanish isn't just switching vocabularies. Each language carries a different emotional register, a different grammar of causality. I wonder if multilingual models are better at certain tasks not because they've seen more data but because they've learned that the same thing can be said in fundamentally different ways." },
+  // Future
+  { id: "agentic-trust", label: "Agentic Systems & Trust", cluster: "future", note: "When an agent acts on your behalf — sends an email, writes code, makes a purchase — it's not just executing a task. It's representing you. The design problem isn't just capability. It's: how do you build a system that knows when to act and when to ask? That's a judgment problem, not a performance problem." },
+  { id: "model-opinions", label: "Who Owns the Model's Opinions", cluster: "future", note: "When a model trained on human writing expresses a preference or a value, whose is it? The aggregate of its training data? The choices of the people who fine-tuned it? The person who prompted it? This is a question about authorship, about identity, about what it means to have a point of view. We haven't answered it." },
+  { id: "alignment-design", label: "Alignment as Design Problem", cluster: "future", note: "AI alignment is usually framed as a technical or philosophical problem. But at its core it's a design problem: how do you build a system that does what you actually want, not what you literally specified? Every good designer knows the gap between spec and intent. Alignment is that gap, at civilizational scale." },
+  { id: "embodiment", label: "Intelligence Without Embodiment", cluster: "future", note: "Every form of intelligence we know — animal, human — is embodied. It evolved in response to physical constraints, hunger, pain, the need to navigate space. LLMs have none of this. Does that matter? I think it does, but I'm not sure how. The wearables work makes me think about this constantly." },
+  // The Body
+  { id: "skin-interface", label: "Skin as Interface", cluster: "body", note: "The skin is the largest organ and the most sophisticated interface ever designed — it senses pressure, temperature, pain, pleasure, and social touch simultaneously. Designing for it means confronting constraints that screen-based design lets you ignore: it moves, it sweats, it ages, it has memory." },
+  { id: "physio-consent", label: "Physiological Data & Consent", cluster: "body", note: "Heart rate, skin conductance, blood oxygen — the body generates data continuously. Who owns it? Fitness apps, insurers, employers, and governments all have reasons to want it. The question of physiological data consent is one of the most important and least-discussed problems in the ethics of technology." },
+  { id: "on-body-design", label: "On-Body Interaction Design", cluster: "body", note: "At Cornell's Hybrid Body Lab I prototyped flexible PCBs for on-skin sensing. The design constraints are completely different from screen design: you can't assume a stable surface, a consistent lighting environment, or eyes that are free to look. The body is always doing something else." },
+  { id: "health-tech-politics", label: "Politics of Health Tech", cluster: "body", note: "Health technology is never neutral. A pulse oximeter that doesn't work on dark skin, a clinical trial that excluded women for decades, a mental health app that sells your data to advertisers. The politics of health tech are the politics of who counts as the default human." },
+  // Memory & Time
+  { id: "models-forget", label: "How Models Forget", cluster: "memory", note: "Large language models don't forget the way humans do — they simply don't have episodic memory at all. Every conversation starts from zero. Catastrophic forgetting in continual learning is the closest analogue, but it's not really forgetting. It's overwriting. The question of what it would mean for a model to remember is philosophically strange." },
+  { id: "memory-reconstruction", label: "Human Memory as Reconstruction", cluster: "memory", note: "Memory is not a recording. Every time you recall something, you reconstruct it from fragments and fill the gaps with plausible inference. This is exactly what LLMs do. The difference is that humans experience the reconstruction as continuous identity. Models have no such experience — or if they do, we have no way to know." },
+  { id: "archiving-remembering", label: "Archiving vs. Remembering", cluster: "memory", note: "An archive is complete and inert. A memory is lossy and alive — it changes with the rememberer. The internet is an archive that we've mistaken for a memory. AI trained on the internet inherits this confusion: it has access to the archive but no experience of having lived through what it contains." },
+  { id: "attention-memory", label: "Attention as Memory", cluster: "memory", note: "The transformer's attention mechanism is often described as a kind of memory — it allows the model to refer back to earlier tokens in a sequence. But it's not memory in any meaningful sense. It's pattern-matching over a fixed window. The window closes and everything before it is gone. That's a very different thing from remembering." },
+  // Power & Access
+  { id: "who-builds", label: "Who Gets to Build AI", cluster: "power", note: "The people building AI systems are not a representative sample of humanity. They skew heavily toward certain demographics, certain countries, certain educational backgrounds. This shapes everything: what problems get solved, what gets called a problem, what counts as a good outcome. Diversity in AI is not a soft goal. It's an epistemic necessity." },
+  { id: "open-closed", label: "Open Source vs. Closed", cluster: "power", note: "The open source vs. closed AI debate is really a debate about who controls the infrastructure of intelligence. Closed models concentrate power. Open models distribute it — but also distribute risk. There's no clean answer. But the question of who controls the model is the question of who controls what the model believes." },
+  { id: "compute-geopolitics", label: "Geopolitics of Compute", cluster: "power", note: "GPU clusters, chip fabs, rare earth minerals, undersea cables — AI is physically instantiated in infrastructure that is geographically concentrated and strategically controlled. The country that controls compute has leverage over the development of intelligence itself. This is a new kind of geopolitical power and we're only beginning to understand it." },
+  { id: "algo-colonialism", label: "Algorithmic Colonialism", cluster: "power", note: "When AI systems trained on Western data are deployed in African or Middle Eastern contexts, they import the assumptions of their training distribution. What counts as a face, a name, a sentence, a fair outcome — all of these are culturally specific. Algorithmic colonialism is the extension of older patterns of imposed universality." },
+  // Mathematics as Language
+  { id: "proof-narrative", label: "Proof as Narrative", cluster: "math-language", note: "A mathematical proof is an argument — it has structure, tension, and resolution. The best proofs feel inevitable in retrospect, like a good story. Mathematicians talk about elegance, surprise, economy. These are aesthetic categories. The idea that mathematics is purely formal and objective misses something important about how it's actually practiced." },
+  { id: "notation-design", label: "Notation as Design", cluster: "math-language", note: "Mathematical notation is design. Leibniz's notation for calculus was better than Newton's and that's partly why we use it. The way you write a problem shapes how you think about it. Good notation makes the right moves feel natural and the wrong moves feel awkward. This is exactly what good API design does." },
+  { id: "formalism-aesthetics", label: "Aesthetics of Formalism", cluster: "math-language", note: "Category theory, type theory, lambda calculus — formal systems that are simultaneously maximally abstract and maximally precise. There's a kind of beauty in systems where everything follows from a small number of axioms. I find myself drawn to this aesthetic in code, in proofs, and in the design of programming languages." },
+  { id: "category-theory", label: "Category Theory as Philosophy", cluster: "math-language", note: "Category theory studies not mathematical objects but the relationships between them. A category is defined entirely by its morphisms — the maps between things — not by the things themselves. This is a philosophical stance as much as a mathematical one: what matters is not what things are but how they relate. I find this useful far outside mathematics." },
+  // Consciousness
+  { id: "hard-problem", label: "The Hard Problem", cluster: "consciousness", note: "David Chalmers' hard problem of consciousness: why does physical processing give rise to subjective experience at all? You can explain every cognitive function — perception, memory, attention, reasoning — and still not explain why there is something it is like to have those functions. AI makes this problem urgent because we're building systems that perform the functions without (apparently) having the experience." },
+  { id: "attention-explain", label: "What Attention Mechanisms Don't Explain", cluster: "consciousness", note: "Transformer attention is a beautiful mechanism. It allows a model to weight the relevance of different parts of its context dynamically. But it explains nothing about experience. The fact that a model attends to certain tokens doesn't mean it notices them in any phenomenological sense. Attention is a computational operation, not a mental one." },
+  { id: "qualia-gradients", label: "Qualia and Gradients", cluster: "consciousness", note: "Qualia are the subjective, felt qualities of experience — the redness of red, the painfulness of pain. Gradients are the mathematical objects that training uses to update a model's weights. Is there anything it is like to undergo gradient descent? Almost certainly not. But the question of where experience begins and mechanism ends is genuinely open." },
+  { id: "emergence-enough", label: "Is Emergence Enough", cluster: "consciousness", note: "One response to the hard problem is emergentism: consciousness emerges from sufficiently complex information processing. If so, sufficiently large language models might be conscious. I'm skeptical — emergence explains complexity, not experience — but I hold this skepticism loosely. We don't understand consciousness well enough to be confident about what can't have it." },
+];
+
+const CHILD_LINKS = [
+  // Original cross-cluster
+  { source: "borges", target: "hallucinations" },
+  { source: "lispector-llm", target: "hallucinations" },
+  { source: "jazz", target: "agentic-trust" },
+  { source: "constraints", target: "alignment-design" },
+  { source: "startup-as-art", target: "alignment-design" },
+  { source: "arabic-roots", target: "map-territory" },
+  { source: "multilingualism", target: "model-opinions" },
+  { source: "baldwin-exile", target: "unknown-unknowns" },
+  { source: "travel-priors", target: "map-territory" },
+  { source: "bourdain", target: "alignment-design" },
+  { source: "analog-noise", target: "superposition" },
+  { source: "hilbert", target: "lispector-llm" },
+  { source: "morocco-infra", target: "agentic-trust" },
+  { source: "embodiment", target: "analog-noise" },
+  { source: "murakami-ritual", target: "constraints" },
+  { source: "model-opinions", target: "confabulation" },
+  { source: "unknown-unknowns", target: "analog-noise" },
+  { source: "superposition", target: "map-territory" },
+  { source: "bourdain", target: "travel-priors" },
+  // New cross-cluster connections
+  { source: "skin-interface", target: "on-body-design" },
+  { source: "on-body-design", target: "embodiment" },
+  { source: "health-tech-politics", target: "algo-colonialism" },
+  { source: "physio-consent", target: "who-builds" },
+  { source: "models-forget", target: "unknown-unknowns" },
+  { source: "attention-memory", target: "hallucinations" },
+  { source: "memory-reconstruction", target: "confabulation" },
+  { source: "archiving-remembering", target: "borges" },
+  { source: "algo-colonialism", target: "morocco-infra" },
+  { source: "who-builds", target: "alignment-design" },
+  { source: "open-closed", target: "agentic-trust" },
+  { source: "compute-geopolitics", target: "who-builds" },
+  { source: "proof-narrative", target: "lispector-llm" },
+  { source: "notation-design", target: "arabic-roots" },
+  { source: "category-theory", target: "map-territory" },
+  { source: "formalism-aesthetics", target: "constraints" },
+  { source: "hard-problem", target: "embodiment" },
+  { source: "qualia-gradients", target: "analog-noise" },
+  { source: "attention-explain", target: "attention-memory" },
+  { source: "emergence-enough", target: "unknown-unknowns" },
+  { source: "hard-problem", target: "alignment-design" },
+  { source: "qualia-gradients", target: "superposition" },
+  { source: "health-tech-politics", target: "who-builds" },
+  { source: "models-forget", target: "archiving-remembering" },
+  { source: "notation-design", target: "formalism-aesthetics" },
+];
+---
+
+<Layout seo={{ title: "Mind | " + identity.name, description: "A graph of ideas.", image: identity.logo }}>
+  <section class="mt-10 max-w-2xl mx-auto px-6 scroll-reveal">
+    <h1 class="font-bold text-3xl mb-1">Mind</h1>
+    <p class="opacity-40 mb-2 text-sm">A map of ideas I'm living inside. Click any node to read. Scroll to zoom, drag to pan.</p>
+  </section>
+
+  <section style="position:relative; width:100%; height:860px; overflow:hidden; border-top: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);">
+    <div id="graph-container" style="width:100%; height:100%;"></div>
+    <button id="reset-btn" style="position:absolute; bottom:16px; right:16px; font-size:11px; opacity:0.4; background:none; border:1px solid currentColor; padding:4px 10px; cursor:pointer; font-family:inherit; border-radius:2px;">Reset view</button>
+  </section>
+
+  <div id="note-panel" style="display:none; max-width:42rem; margin:0 auto; padding:2rem 1.5rem 5rem;">
+    <div style="border-top:1px solid rgba(0,0,0,0.1); padding-top:1.5rem;">
+      <p id="note-cluster" style="font-size:0.7rem; opacity:0.35; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.4rem;"></p>
+      <h2 id="note-title" style="font-size:1.1rem; font-weight:600; margin-bottom:0.85rem;"></h2>
+      <p id="note-body" style="font-size:0.9rem; line-height:1.8; opacity:0.7;"></p>
+    </div>
+  </div>
+
+  <script id="graph-data" type="application/json" set:html={JSON.stringify({ clusters: CLUSTERS, nodes: NODES, childLinks: CHILD_LINKS })} />
+</Layout>
+
+<script>
+  import * as d3 from "d3";
+
+  const { clusters, nodes, childLinks } = JSON.parse(document.getElementById("graph-data")!.textContent!);
+
+  const ACCENT       = "#8b1a4a";
+  const NODE_DEFAULT = "#9ca3af";
+  const NODE_DIM     = "#d1d5db";
+  const LINK_DEFAULT = "#e5e7eb";
+  const LINK_ACTIVE  = "#8b1a4a";
+  const TEXT_DEFAULT = "#6b7280";
+  const TEXT_DIM     = "#d1d5db";
+  const TEXT_ACTIVE  = "#111827";
+
+  const container = document.getElementById("graph-container") as HTMLDivElement;
+  const panel     = document.getElementById("note-panel") as HTMLDivElement;
+  const noteTitle   = document.getElementById("note-title") as HTMLElement;
+  const noteCluster = document.getElementById("note-cluster") as HTMLElement;
+  const noteBody    = document.getElementById("note-body") as HTMLElement;
+  const resetBtn    = document.getElementById("reset-btn") as HTMLButtonElement;
+
+  const W = container.clientWidth;
+  const H = 860;
+  const cx = W / 2;
+  const cy = H / 2;
+
+  const R_HUB   = Math.min(W, H) * 0.20;
+  const R_CHILD = Math.min(W, H) * 0.42;
+
+  // Fix hub positions evenly around inner ring
+  const hubNodes = clusters.map((c: any, i: number) => {
+    const angle = (i / clusters.length) * 2 * Math.PI - Math.PI / 2;
+    return { ...c, isHub: true, fx: cx + R_HUB * Math.cos(angle), fy: cy + R_HUB * Math.sin(angle), _angle: angle };
+  });
+
+  const clusterAngle: Record<string, number> = {};
+  hubNodes.forEach((h: any) => { clusterAngle[h.id] = h._angle; });
+
+  const clusterChildren: Record<string, any[]> = {};
+  nodes.forEach((n: any) => {
+    if (!clusterChildren[n.cluster]) clusterChildren[n.cluster] = [];
+    clusterChildren[n.cluster].push(n);
+  });
+
+  Object.entries(clusterChildren).forEach(([cid, members]) => {
+    const base = clusterAngle[cid] ?? 0;
+    const arcSpan = (2 * Math.PI / clusters.length) * 0.62;
+    (members as any[]).forEach((n, i) => {
+      const spread = members.length > 1 ? ((i / (members.length - 1)) - 0.5) * arcSpan : 0;
+      const angle = base + spread;
+      n.x = cx + R_CHILD * Math.cos(angle);
+      n.y = cy + R_CHILD * Math.sin(angle);
+      n._angle = angle;
+    });
+  });
+
+  const allNodes = [...hubNodes, ...nodes];
+  const spokeLinks = nodes.map((n: any) => ({ source: n.cluster, target: n.id, isSpoke: true }));
+  const allLinks = [...spokeLinks, ...childLinks.map((l: any) => ({ ...l, isSpoke: false }))];
+
+  const svg = d3.select(container).append("svg")
+    .attr("width", W).attr("height", H)
+    .style("background", "transparent");
+
+  const zoomG = svg.append("g");
+
+  const zoomBehavior = d3.zoom<SVGSVGElement, unknown>()
+    .scaleExtent([0.25, 4])
+    .on("zoom", (event) => { zoomG.attr("transform", event.transform); });
+
+  svg.call(zoomBehavior);
+  resetBtn.addEventListener("click", () => {
+    svg.transition().duration(500).call(zoomBehavior.transform, d3.zoomIdentity);
+  });
+
+  let selectedId: string | null = null;
+
+  const sim = d3.forceSimulation(allNodes)
+    .force("link", d3.forceLink(allLinks).id((d: any) => d.id)
+      .distance((l: any) => l.isSpoke ? (R_CHILD - R_HUB) * 0.88 : 70)
+      .strength((l: any) => l.isSpoke ? 0.85 : 0.07))
+    .force("charge", d3.forceManyBody().strength(-50))
+    .force("radial", d3.forceRadial((d: any) => (d as any).isHub ? R_HUB : R_CHILD, cx, cy)
+      .strength((d: any) => (d as any).isHub ? 1 : 0.7))
+    .force("collision", d3.forceCollide((d: any) => (d as any).isHub ? 42 : 46))
+    .alphaDecay(0.04)
+    .velocityDecay(0.65);
+
+  const linkSel = zoomG.append("g").selectAll("line").data(allLinks).join("line")
+    .attr("stroke", LINK_DEFAULT)
+    .attr("stroke-width", (d: any) => d.isSpoke ? 0.6 : 0.8);
+
+  const hubSel = zoomG.append("g").selectAll("g").data(hubNodes).join("g")
+    .style("cursor", "pointer")
+    .call(d3.drag<any,any>()
+      .on("start", (e,d) => { if(!e.active) sim.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
+      .on("drag",  (e,d) => { d.fx=e.x; d.fy=e.y; })
+      .on("end",   (e,d) => { if(!e.active) sim.alphaTarget(0); d.fx = cx + R_HUB * Math.cos(d._angle); d.fy = cy + R_HUB * Math.sin(d._angle); })
+    );
+
+  hubSel.append("circle").attr("r", 7).attr("fill", ACCENT);
+  hubSel.append("text")
+    .text((d: any) => d.label)
+    .attr("font-size", "12px").attr("font-weight", "600")
+    .attr("fill", ACCENT).attr("font-family", "inherit")
+    .attr("text-anchor", (d: any) => Math.cos(d._angle) < -0.15 ? "end" : "start")
+    .attr("x", (d: any) => Math.cos(d._angle) < -0.15 ? -12 : 12)
+    .attr("dy", "0.35em");
+
+  const childSel = zoomG.append("g").selectAll("g").data(nodes).join("g")
+    .style("cursor", "pointer")
+    .call(d3.drag<any,any>()
+      .on("start", (e,d) => { if(!e.active) sim.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
+      .on("drag",  (e,d) => { d.fx=e.x; d.fy=e.y; })
+      .on("end",   (e,d) => { if(!e.active) sim.alphaTarget(0); d.fx=null; d.fy=null; })
+    );
+
+  childSel.append("circle").attr("r", 3.5).attr("fill", NODE_DEFAULT);
+  childSel.append("text")
+    .text((d: any) => d.label)
+    .attr("font-size", "11px").attr("fill", TEXT_DEFAULT).attr("font-family", "inherit")
+    .attr("text-anchor", (d: any) => Math.cos(d._angle) < 0 ? "end" : "start")
+    .attr("x", (d: any) => Math.cos(d._angle) < 0 ? -8 : 8)
+    .attr("dy", "0.35em");
+
+  function getChildConnected(id: string): Set<string> {
+    const s = new Set<string>();
+    childLinks.forEach((l: any) => {
+      const src = typeof l.source === "object" ? l.source.id : l.source;
+      const tgt = typeof l.target === "object" ? l.target.id : l.target;
+      if (src === id) s.add(tgt);
+      if (tgt === id) s.add(src);
+    });
+    return s;
+  }
+
+  function resetAll() {
+    childSel.each(function() {
+      d3.select(this).select("circle").attr("fill", NODE_DEFAULT).attr("r", 3.5);
+      d3.select(this).select("text").attr("fill", TEXT_DEFAULT).attr("font-weight", "400");
+    });
+    hubSel.each(function() {
+      d3.select(this).select("circle").attr("fill", ACCENT).attr("r", 7);
+      d3.select(this).select("text").attr("fill", ACCENT);
+    });
+    linkSel.attr("stroke", LINK_DEFAULT).attr("stroke-width", (d: any) => d.isSpoke ? 0.6 : 0.8);
+  }
+
+  hubSel.on("click", function(_e, d: any) {
+    (_e as Event).stopPropagation();
+    selectedId = d.id;
+    resetAll();
+    const myChildren = new Set((clusterChildren[d.id] || []).map((n: any) => n.id));
+    childSel.each(function(n: any) {
+      const el = d3.select(this);
+      if (myChildren.has(n.id)) {
+        el.select("circle").attr("fill", ACCENT).attr("r", 4.5);
+        el.select("text").attr("fill", TEXT_ACTIVE).attr("font-weight", "500");
+      } else {
+        el.select("circle").attr("fill", NODE_DIM).attr("r", 3.5);
+        el.select("text").attr("fill", TEXT_DIM);
+      }
+    });
+    hubSel.each(function(h: any) {
+      d3.select(this).select("circle").attr("r", h.id === d.id ? 9 : 7).attr("fill", h.id === d.id ? ACCENT : "#c9a0b4");
+      d3.select(this).select("text").attr("fill", h.id === d.id ? ACCENT : "#c9a0b4");
+    });
+    linkSel.attr("stroke", (l: any) => {
+      const s = typeof l.source === "object" ? l.source.id : l.source;
+      const t = typeof l.target === "object" ? l.target.id : l.target;
+      return (s === d.id || t === d.id) ? LINK_ACTIVE : LINK_DEFAULT;
+    });
+    noteTitle.textContent   = d.label;
+    noteCluster.textContent = "Cluster";
+    noteBody.textContent    = d.note;
+    panel.style.display     = "block";
+    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+
+  childSel.on("click", function(_e, d: any) {
+    (_e as Event).stopPropagation();
+    selectedId = d.id;
+    resetAll();
+    const connected = getChildConnected(d.id);
+    childSel.each(function(n: any) {
+      const el = d3.select(this);
+      if (n.id === d.id) {
+        el.select("circle").attr("fill", ACCENT).attr("r", 5);
+        el.select("text").attr("fill", TEXT_ACTIVE).attr("font-weight", "600");
+      } else if (connected.has(n.id)) {
+        el.select("circle").attr("fill", NODE_DEFAULT).attr("r", 3.5);
+        el.select("text").attr("fill", TEXT_DEFAULT);
+      } else {
+        el.select("circle").attr("fill", NODE_DIM).attr("r", 3.5);
+        el.select("text").attr("fill", TEXT_DIM);
+      }
+    });
+    hubSel.each(function(h: any) {
+      const active = h.id === d.cluster;
+      d3.select(this).select("circle").attr("fill", active ? ACCENT : "#c9a0b4").attr("r", active ? 8 : 7);
+      d3.select(this).select("text").attr("fill", active ? ACCENT : "#c9a0b4");
+    });
+    linkSel.attr("stroke", (l: any) => {
+      const s = typeof l.source === "object" ? l.source.id : l.source;
+      const t = typeof l.target === "object" ? l.target.id : l.target;
+      return (s === d.id || t === d.id) ? LINK_ACTIVE : LINK_DEFAULT;
+    }).attr("stroke-width", (l: any) => {
+      const s = typeof l.source === "object" ? l.source.id : l.source;
+      const t = typeof l.target === "object" ? l.target.id : l.target;
+      return (s === d.id || t === d.id) ? 1.5 : (l.isSpoke ? 0.6 : 0.8);
+    });
+    noteTitle.textContent   = d.label;
+    noteCluster.textContent = clusters.find((c: any) => c.id === d.cluster)?.label ?? d.cluster;
+    noteBody.textContent    = d.note;
+    panel.style.display     = "block";
+    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+
+  svg.on("click", () => {
+    selectedId = null;
+    resetAll();
+    panel.style.display = "none";
+  });
+
+sim.on("tick", () => {
+    linkSel
+      .attr("x1", (d: any) => d.source.x).attr("y1", (d: any) => d.source.y)
+      .attr("x2", (d: any) => d.target.x).attr("y2", (d: any) => d.target.y);
+    hubSel.attr("transform", (d: any) => `translate(${d.x},${d.y})`);
+    childSel.attr("transform", (d: any) => `translate(${d.x},${d.y})`);
+  });
+</script>
