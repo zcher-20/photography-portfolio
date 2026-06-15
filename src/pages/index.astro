@@ -55,7 +55,7 @@ posts.splice(3)
     </div>
   </section>
   <section class="mt-20 mb-20 scroll-reveal">
-  <h2 class="max-w-2xl mx-auto px-6 mb-6">Favorite Books</h2>
+  <h2 class="max-w-2xl mx-auto px-6 mb-6">Recent Reads</h2>
   <div style="overflow:hidden; width:100%; position:relative;">
     <div style="position:absolute; left:0; top:0; bottom:0; width:80px; background:linear-gradient(to right, white, transparent); z-index:2; pointer-events:none;"></div>
     <div style="position:absolute; right:0; top:0; bottom:0; width:80px; background:linear-gradient(to left, white, transparent); z-index:2; pointer-events:none;"></div>
@@ -85,32 +85,34 @@ posts.splice(3)
     { title: "Devotions", author: "Mary Oliver" },
   ];
 
-  const COVERS = {
-    "Never Let Me Go": "https://covers.openlibrary.org/b/isbn/1400043395-M.jpg",
-    "The Picture of Dorian Gray": "https://covers.openlibrary.org/b/isbn/0141439572-M.jpg",
-    "East of Eden": "https://covers.openlibrary.org/b/isbn/0142004235-M.jpg",
-    "Giovanni's Room": "https://covers.openlibrary.org/b/isbn/0375701877-M.jpg",
-    "The Year of Magical Thinking": "/magical-thinking.jpg",
-    "Thinking, Fast and Slow": "https://covers.openlibrary.org/b/isbn/9780374533557-M.jpg",
-    "Just Kids": "https://covers.openlibrary.org/b/isbn/9780060936228-M.jpg",
-    "Circe": "https://covers.openlibrary.org/b/isbn/0316556343-M.jpg",
-    "Sula": "https://covers.openlibrary.org/b/isbn/1400033438-M.jpg",
-    "The Invisible Life of Addie LaRue": "https://covers.openlibrary.org/b/isbn/0765387565-M.jpg",
-    "Normal People": "https://covers.openlibrary.org/b/isbn/9781984822178-M.jpg",
-    "The Book Thief": "https://covers.openlibrary.org/b/isbn/0375842209-M.jpg",
-    "All About Love": "https://covers.openlibrary.org/b/isbn/0060959479-M.jpg",
-    "White Nights": "https://covers.openlibrary.org/b/isbn/9780140449266-M.jpg",
-    "The Secret History": "https://covers.openlibrary.org/b/isbn/1400031702-M.jpg",
-    "Walden": "https://covers.openlibrary.org/b/isbn/9780691096124-M.jpg",
-    "Atonement": "https://covers.openlibrary.org/b/isbn/9780385721394-M.jpg",
-    "Devotions": "/devotions.jpg",
-  };
+  const COVERS = new Map([
+    ["Never Let Me Go", "https://covers.openlibrary.org/b/isbn/1400043395-M.jpg"],
+    ["The Picture of Dorian Gray", "https://covers.openlibrary.org/b/isbn/0141439572-M.jpg"],
+    ["East of Eden", "https://covers.openlibrary.org/b/isbn/0142004235-M.jpg"],
+    ["Giovanni's Room", "https://covers.openlibrary.org/b/isbn/0375701877-M.jpg"],
+    ["The Year of Magical Thinking", "/magical-thinking.jpg"],
+    ["Thinking, Fast and Slow", "https://covers.openlibrary.org/b/isbn/9780374533557-M.jpg"],
+    ["Just Kids", "https://covers.openlibrary.org/b/isbn/9780060936228-M.jpg"],
+    ["Circe", "https://covers.openlibrary.org/b/isbn/0316556343-M.jpg"],
+    ["Sula", "https://covers.openlibrary.org/b/isbn/1400033438-M.jpg"],
+    ["The Invisible Life of Addie LaRue", "https://covers.openlibrary.org/b/isbn/0765387565-M.jpg"],
+    ["Normal People", "https://covers.openlibrary.org/b/isbn/9781984822178-M.jpg"],
+    ["The Book Thief", "https://covers.openlibrary.org/b/isbn/0375842209-M.jpg"],
+    ["All About Love", "https://covers.openlibrary.org/b/isbn/0060959479-M.jpg"],
+    ["White Nights", "https://covers.openlibrary.org/b/isbn/9780140449266-M.jpg"],
+    ["The Secret History", "https://covers.openlibrary.org/b/isbn/1400031702-M.jpg"],
+    ["Walden", "https://covers.openlibrary.org/b/isbn/9780691096124-M.jpg"],
+    ["Atonement", "https://covers.openlibrary.org/b/isbn/9780385721394-M.jpg"],
+    ["Devotions", "/devotions.jpg"],
+  ]);
 
-  const track = document.getElementById('home-marquee-track');if (!track) throw new Error('no track');
+  const track = document.getElementById('home-marquee-track');
+  if (!track) throw new Error('no track');
+
   const all = [...FAVORITES, ...FAVORITES];
 
   all.forEach(({ title, author }) => {
-    const cover = COVERS[title] ?? '';
+    const cover = COVERS.get(title) ?? '';
     const item = document.createElement('div');
     item.style.cssText = 'flex-shrink:0; width:90px; cursor:default;';
     item.innerHTML = `
