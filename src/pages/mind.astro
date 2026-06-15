@@ -127,7 +127,7 @@ const CHILD_LINKS = [
 <Layout seo={{ title: "Mind | " + identity.name, description: "A graph of ideas.", image: identity.logo }}>
   <section class="mt-10 max-w-2xl mx-auto px-6 scroll-reveal text-center">
     <h1 class="font-bold text-3xl mb-1">Mind</h1>
-    <p class="opacity-40 mb-10 text-sm">A map of ideas I'm living inside. Click any node to read. Scroll to zoom, drag to pan.</p>
+    <p class="opacity-40 mb-10 text-sm">A map of ideas I'm living inside. Click any node to read. Ctrl+scroll to zoom, drag to pan.</p>
   </section>
 
   <section style="position:relative; width:100%; height:860px; overflow:hidden; border-top: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);">
@@ -212,7 +212,7 @@ const CHILD_LINKS = [
 
   const zoomG = svg.append("g");
 
-  const zoomBehavior = d3.zoom<SVGSVGElement, unknown>()
+  const zoomBehavior = d3.zoom<SVGSVGElement, unknown>().filter((event) => event.ctrlKey || event.type !== "wheel")
     .scaleExtent([0.25, 4])
     .on("zoom", (event) => { zoomG.attr("transform", event.transform); });
 
