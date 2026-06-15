@@ -8,7 +8,7 @@ import { remarkReadingTime } from "./remark-reading-time.mjs";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://anikasomaia.com",
+  site: "https://personal-website-kappa-one-82.vercel.app",
   integrations: [tailwind(), icon({ iconDir: "src/icons" }), sitemap()],
   output: "server",
   adapter: vercel(),
