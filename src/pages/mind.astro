@@ -209,7 +209,7 @@ const CHILD_LINKS = [
 
   const zoomG = svg.append("g");
 
-  const zoomBehavior = d3.zoom<SVGSVGElement, unknown>().filter((event) => event.ctrlKey || event.type !== "wheel")
+  const zoomBehavior = d3.zoom<SVGSVGElement, unknown>().filter((event) => event.ctrlKey || (event.type !== "wheel" && event.type !== "touchstart" && event.type !== "touchmove"))
     .scaleExtent([0.25, 4])
     .on("zoom", (event) => { zoomG.attr("transform", event.transform); });
 
