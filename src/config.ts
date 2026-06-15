@@ -89,6 +89,10 @@ export const homePageContent: HomePageContent = {
       title: "Mind",
       url: "/mind",
     },
+    {
+      title: "Photography",
+      url: "/photography",
+    },
   ],
   currentlyReading: [
     {
