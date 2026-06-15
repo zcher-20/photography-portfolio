@@ -1,7 +1,23 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { identity } from "../config";
+
+const PHOTOS = [
+  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
+  "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=80",
+  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80",
+  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80",
+  "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=600&q=80",
+  "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=600&q=80",
+  "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=80",
+  "https://images.unsplash.com/photo-1504700610630-ac6aba3536d3?w=600&q=80",
+  "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80",
+  "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&q=80",
+  "https://images.unsplash.com/photo-1510784722466-f2aa240d2699?w=600&q=80",
+  "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80",
+];
 ---
+
 <Layout
   seo={{
     title: "Photography | " + identity.name,
@@ -9,18 +25,39 @@ import { identity } from "../config";
     image: identity.logo,
   }}
 >
-  <div id="ptc" style="width:100vw; height:100vh; position:fixed; top:0; left:0; overflow:hidden; background:#fff; cursor:none;">
-    <h1 id="ptitle" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:clamp(3rem,10vw,8rem); font-weight:700; letter-spacing:-0.03em; color:#111; pointer-events:none; z-index:10; white-space:nowrap; transition: opacity 0.3s;">Photography</h1>
-  </div>
-</Layout>
+  <!-- Trail section -->
+  <section
+    id="trail-section"
+    style="position:relative; width:100%; height:90vh; overflow:hidden; cursor:crosshair; background:#fff;"
+  >
+    <h1
+      id="photo-title"
+      style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:clamp(3rem,10vw,7rem); font-weight:700; letter-spacing:-0.03em; color:#111; pointer-events:none; z-index:10; white-space:nowrap; transition:opacity 0.4s; user-select:none;"
+    >Photography</h1>
+    <p
+      style="position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); font-size:0.75rem; opacity:0.3; pointer-events:none; letter-spacing:0.08em; text-transform:uppercase;"
+    >Move your mouse</p>
+  </section>
 
-<style is:global>
-  #ptc ~ * { display: none; }
-  body { overflow: hidden; }
-</style>
+  <!-- Gallery marquee section -->
+  <section class="mt-16 mb-4 scroll-reveal">
+    <div class="max-w-2xl mx-auto px-6 mb-6 text-center">
+      <h1 class="font-bold text-3xl mb-1">Gallery</h1>
+    </div>
+    <div style="overflow:hidden; width:100%; position:relative;">
+      <div style="position:absolute; left:0; top:0; bottom:0; width:80px; background:linear-gradient(to right, white, transparent); z-index:2; pointer-events:none;"></div>
+      <div style="position:absolute; right:0; top:0; bottom:0; width:80px; background:linear-gradient(to left, white, transparent); z-index:2; pointer-events:none;"></div>
+      <div id="gallery-track" style="display:flex; gap:12px; width:max-content; will-change:transform; padding:8px 0 16px;"></div>
+    </div>
+  </section>
+
+  <div class="mb-20"></div>
+
+</Layout>
 
 <script is:inline>
   (function () {
+    // Trail effect
     var PHOTOS = [
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80",
       "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&q=80",
@@ -35,49 +72,109 @@ import { identity } from "../config";
       "https://images.unsplash.com/photo-1510784722466-f2aa240d2699?w=400&q=80",
       "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=400&q=80",
     ];
-    var c = document.getElementById('ptc');
-    var t = document.getElementById('ptitle');
-    if (!c || !t) return;
-    var lastX = window.innerWidth / 2;
-    var lastY = window.innerHeight / 2;
+
+    var section = document.getElementById('trail-section');
+    var title = document.getElementById('photo-title');
+    if (!section || !title) return;
+
+    var lastX = 0;
+    var lastY = 0;
     var photoIndex = 0;
     var threshold = 80;
     var distAccum = 0;
     var moveTimeout = 0;
-    c.addEventListener('mousemove', function (e) {
-      var mouseX = e.clientX;
-      var mouseY = e.clientY;
+
+    section.addEventListener('mousemove', function (e) {
+      var rect = section.getBoundingClientRect();
+      var mouseX = e.clientX - rect.left;
+      var mouseY = e.clientY - rect.top;
       var dx = mouseX - lastX;
       var dy = mouseY - lastY;
       distAccum += Math.sqrt(dx * dx + dy * dy);
-      t.style.opacity = '0.08';
+
+      title.style.opacity = '0.06';
       clearTimeout(moveTimeout);
-      moveTimeout = window.setTimeout(function () { t.style.opacity = '1'; }, 1500);
+      moveTimeout = window.setTimeout(function () {
+        title.style.opacity = '1';
+      }, 1500);
+
       if (distAccum >= threshold) {
         distAccum = 0;
         spawnPhoto(mouseX, mouseY);
       }
+
       lastX = mouseX;
       lastY = mouseY;
     });
+
+    section.addEventListener('mouseleave', function () {
+      title.style.opacity = '1';
+    });
+
     function spawnPhoto(x, y) {
       var img = document.createElement('img');
       img.src = PHOTOS[photoIndex % PHOTOS.length];
       photoIndex++;
-      var w = 120 + Math.random() * 60;
+      var w = 110 + Math.random() * 70;
       var h = w * (0.65 + Math.random() * 0.5);
-      var rotate = (Math.random() - 0.5) * 20;
-      img.style.cssText = 'position:absolute;left:' + (x - w/2) + 'px;top:' + (y - h/2) + 'px;width:' + w + 'px;height:' + h + 'px;object-fit:cover;border-radius:2px;pointer-events:none;transform:rotate(' + rotate + 'deg) scale(0.8);opacity:0;transition:opacity 0.15s ease,transform 0.15s ease;z-index:5;';
-      c.appendChild(img);
+      var rotate = (Math.random() - 0.5) * 18;
+      img.style.cssText = 'position:absolute;left:' + (x - w/2) + 'px;top:' + (y - h/2) + 'px;width:' + w + 'px;height:' + h + 'px;object-fit:cover;border-radius:2px;pointer-events:none;transform:rotate(' + rotate + 'deg) scale(0.85);opacity:0;transition:opacity 0.15s ease,transform 0.15s ease;z-index:5;';
+      section.appendChild(img);
       requestAnimationFrame(function () {
         img.style.opacity = '1';
         img.style.transform = 'rotate(' + rotate + 'deg) scale(1)';
       });
       setTimeout(function () {
         img.style.opacity = '0';
-        img.style.transform = 'rotate(' + rotate + 'deg) scale(1.1)';
+        img.style.transform = 'rotate(' + rotate + 'deg) scale(1.08)';
         setTimeout(function () { img.remove(); }, 500);
       }, 1800);
     }
+
+    // Gallery marquee
+    var GALLERY = [
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
+      "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=80",
+      "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80",
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80",
+      "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=600&q=80",
+      "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=600&q=80",
+      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=80",
+      "https://images.unsplash.com/photo-1504700610630-ac6aba3536d3?w=600&q=80",
+      "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80",
+      "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&q=80",
+      "https://images.unsplash.com/photo-1510784722466-f2aa240d2699?w=600&q=80",
+      "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80",
+    ];
+
+    var track = document.getElementById('gallery-track');
+    if (!track) return;
+
+    var all = GALLERY.concat(GALLERY);
+    all.forEach(function (src) {
+      var item = document.createElement('div');
+      item.style.cssText = 'flex-shrink:0; width:200px; height:140px; overflow:hidden; border-radius:4px;';
+      var img = document.createElement('img');
+      img.src = src;
+      img.style.cssText = 'width:100%; height:100%; object-fit:cover;';
+      item.appendChild(img);
+      track.appendChild(item);
+    });
+
+    var gx = 0;
+    var gPaused = false;
+    track.addEventListener('mouseenter', function () { gPaused = true; });
+    track.addEventListener('mouseleave', function () { gPaused = false; });
+
+    function animateGallery() {
+      if (!gPaused) {
+        gx -= 0.6;
+        var half = track.scrollWidth / 2;
+        if (Math.abs(gx) >= half) gx = 0;
+        track.style.transform = 'translateX(' + gx + 'px)';
+      }
+      requestAnimationFrame(animateGallery);
+    }
+    animateGallery();
   })();
 </script>
