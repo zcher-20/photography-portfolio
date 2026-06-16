@@ -83,6 +83,11 @@ export type Project = {
   url: string;
   demoUrl?: string;
   pdfUrl?: string;
+  tags?: string[];
+  venue?: string;
+  featured?: boolean;
+  isPublication?: boolean;
+  pdfUrl?: string;
 };
 
 export type ProjectPageContent = {

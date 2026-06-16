@@ -156,21 +156,16 @@ Recognized at ICLR 2024 (Notable), IBM/IEEE AICS 2023, Best Research Award at th
   },
 };
 
-// Projects (/projects)
-export const projectsPageContent: ProjectPageContent = {
-  seo: {
-    title: "Projects | Zayneb Cherif",
-    description: "AI research, full-stack apps, and systems that push the edge.",
-    image: identity.logo,
-  },
-  subtitle: "AI research, full-stack apps, and systems that push the edge.",
-  projects: [
+projects: [
     {
       title: "Multi-Agent Investment Research System",
       description:
         "5-agent LLM pipeline on Azure AI Foundry — Research, Financial Analysis, Risk, News, and Memo agents producing a full investment thesis from a single stock ticker. Microsoft Agents League Hackathon.",
       image: "/project-investment.jpg",
       url: "https://github.com/zcher-20/Alpha-Research-Agent-",
+      featured: true,
+      venue: "Microsoft Agents League Hackathon",
+      tags: ["Multi-Agent", "Azure AI Foundry", "LLMs", "Python"],
     },
     {
       title: "RICER — AI Forest Fire Risk Prediction",
@@ -178,6 +173,9 @@ export const projectsPageContent: ProjectPageContent = {
         "ML models for wildfire risk assessment in Morocco using satellite imagery, GIS, and Earth Observation data. Built with Al Akhawayn University Digital Innovation Lab.",
       image: "/project-ricer.jpg",
       url: "https://github.com/zcher-20",
+      featured: true,
+      venue: "Al Akhawayn University Digital Innovation Lab",
+      tags: ["Computer Vision", "Earth Observation", "GIS", "Python"],
     },
     {
       title: "Hybrid Quantum-Classical Medical Image Segmentation",
@@ -185,6 +183,9 @@ export const projectsPageContent: ProjectPageContent = {
         "Hybrid quantum-classical U-Net replacing the CNN bottleneck with a 4-qubit PennyLane variational circuit. 95% IoU at 60% fewer parameters (2M vs 5M). NYU Abu Dhabi Hackathon — Quantum Track.",
       image: "/project-quantum.jpg",
       url: "https://github.com/zcher-20/SihaSansFrontieres",
+      featured: true,
+      venue: "NYU Abu Dhabi Hackathon — Quantum Track",
+      tags: ["Quantum ML", "PennyLane", "Medical Imaging", "PyTorch"],
     },
     {
       title: "Analog In-Memory Computing with Uncertainty Quantification for Edge Medical Imaging",
@@ -192,7 +193,10 @@ export const projectsPageContent: ProjectPageContent = {
         "Published at ICLR 2024 (Notable). Designed and benchmarked a deep learning inference pipeline on IBM analog in-memory computing hardware for medical image segmentation at the edge, with uncertainty quantification methods to measure prediction reliability.",
       image: "/project-aimc.jpg",
       year: "2024",
-      url: "https://arxiv.org/search/?searchtype=author&query=Cherif+Z",
+      url: "https://openreview.net/forum?id=hvp5I4dDya",
+      isPublication: true,
+      venue: "ICLR 2024 · Notable Paper",
+      tags: ["IBM Research", "Analog Computing", "Medical Imaging", "Uncertainty Quantification"],
     },
     {
       title: "Medical Neural Architecture Search: Survey and Taxonomy",
@@ -200,10 +204,12 @@ export const projectsPageContent: ProjectPageContent = {
         "Published at IJCAI 2024, pp. 7932–7940. Co-authored a comprehensive survey and taxonomy of Neural Architecture Search methods in medical imaging, systematically categorizing 100+ papers. Presented to 200+ researchers at IBM/IEEE AICS 2023.",
       image: "/project-survey.jpg",
       year: "2024",
-      url: "https://www.ijcai.org/proceedings/2024/877",
+      url: "https://www.ijcai.org/proceedings/2024/878",
+      isPublication: true,
+      venue: "IJCAI 2024 · pp. 7932–7940",
+      tags: ["Neural Architecture Search", "Medical Imaging", "Survey", "IBM Research"],
     },
   ],
-};
 
 // Work (/work)
 export const workPageContent: WorkPageContent = {

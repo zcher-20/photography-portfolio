@@ -5,12 +5,12 @@ import {marked} from "marked"
 
 type Props = Project;
 
-const { title, description, image, year, url, demoUrl, pdfUrl } = Astro.props;
+const { title, description, image, year, url, demoUrl, pdfUrl, tags, venue } = Astro.props;
 const htmlDescription = marked.parse(description);
 const cardId = Math.random().toString(36).slice(2, 8);
 ---
 
-<div class="sm:py-5 py-10 flex flex-col gap-6 group-hover:opacity-60 hover:!opacity-100 transition-opacity">
+<div class="sm:py-5 py-10 flex flex-col gap-6 group-hover:opacity-60 hover:!opacity-100 transition-opacity project-card-wrap" style="position:relative;">
   <div
     id={`trigger-${cardId}`}
     class="w-full bg-gray-200 dark:bg-gray-700 rounded-lg aspect-video block overflow-hidden cursor-zoom-in"
@@ -34,9 +34,11 @@ const cardId = Math.random().toString(36).slice(2, 8);
   </div>
   <div class="flex-1">
     <div class="flex items-center gap-1 mb-2">
-      <a href={url} target="_blank" class="hover:underline">
-        <h2 class="font-medium">{title}</h2>
-      </a>
+      <span
+        id={`hover-trigger-${cardId}`}
+        class="font-medium cursor-default hover:underline underline-offset-2"
+        style="text-decoration-color: rgba(0,0,0,0.3);"
+      >{title}</span>
       {year && <span class="opacity-60">· {year}</span>}
     </div>
     <div class="opacity-60">
@@ -50,6 +52,52 @@ const cardId = Math.random().toString(36).slice(2, 8);
         </span>
       )}
     </div>
+    {tags && tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mt-3">
+        {tags.map((tag) => (
+          <span style="font-size:11px; padding:2px 8px; background:#f3f4f6; border-radius:999px; color:#6b7280;">{tag}</span>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <!-- Hovercard -->
+  <div
+    id={`hovercard-${cardId}`}
+    style="display:none; position:absolute; left:calc(100% + 16px); top:0; width:280px; background:#fff; border:1px solid #e5e7eb; border-radius:10px; box-shadow:0 8px 30px rgba(0,0,0,0.1); padding:20px; z-index:100; pointer-events:auto;"
+  >
+    {image && !pdfUrl && (
+      <img
+        src={image}
+        alt={title}
+        style="width:100%; height:140px; object-fit:cover; border-radius:6px; margin-bottom:14px;"
+      />
+    )}
+    <p style="font-size:13px; font-weight:600; margin:0 0 4px; color:#111;">{title}</p>
+    {venue && (
+      <p style="font-size:11px; color:#8b1a4a; margin:0 0 12px; font-weight:500;">{venue}</p>
+    )}
+    {tags && tags.length > 0 && (
+      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
+        {tags.map((tag) => (
+          <span style="font-size:10px; padding:2px 8px; background:#f3f4f6; border-radius:999px; color:#6b7280;">{tag}</span>
+        ))}
+      </div>
+    )}
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <a
+        href={url}
+        target="_blank"
+        style="font-size:11px; padding:5px 12px; background:#111; color:#fff; border-radius:6px; text-decoration:none; font-weight:500;"
+      >{pdfUrl || url.includes('openreview') || url.includes('ijcai') ? 'Read paper →' : 'GitHub →'}</a>
+      {demoUrl && (
+        <a
+          href={demoUrl}
+          target="_blank"
+          style="font-size:11px; padding:5px 12px; background:#f3f4f6; color:#374151; border-radius:6px; text-decoration:none; font-weight:500;"
+        >Demo →</a>
+      )}
+    </div>
   </div>
 </div>
 
@@ -58,26 +106,21 @@ const cardId = Math.random().toString(36).slice(2, 8);
   id={`lightbox-${cardId}`}
   style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:9999; align-items:center; justify-content:center;"
 >
-  <!-- Card -->
   <div
     id={`card-${cardId}`}
     style="position:relative; width:min(90vw,920px); height:85vh; background:#fff; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,0.5);"
     onclick="event.stopPropagation()"
   >
-    <!-- Close button -->
     <button
       id={`close-${cardId}`}
       style="position:absolute; top:12px; right:14px; z-index:10; background:rgba(0,0,0,0.12); border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; color:#333;"
     >✕</button>
 
     {pdfUrl ? (
-      <!-- PDF slideshow -->
       <div style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
-        <!-- Canvas area -->
         <div style="flex:1; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#f5f5f5; padding:16px;">
           <canvas id={`pdf-canvas-${cardId}`} style="max-width:100%; max-height:100%; object-fit:contain; box-shadow:0 4px 20px rgba(0,0,0,0.15);"></canvas>
         </div>
-        <!-- Controls -->
         <div style="height:56px; display:flex; align-items:center; justify-content:center; gap:24px; border-top:1px solid #eee; flex-shrink:0; background:#fff;">
           <button id={`prev-${cardId}`} style="background:none; border:1px solid #ddd; border-radius:6px; padding:6px 16px; cursor:pointer; font-size:14px; color:#444;">←</button>
           <span id={`page-info-${cardId}`} style="font-size:13px; opacity:0.5; min-width:60px; text-align:center;">1 / ?</span>
@@ -85,23 +128,41 @@ const cardId = Math.random().toString(36).slice(2, 8);
         </div>
       </div>
     ) : (
-      <!-- Image view -->
       <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:16px; background:#fff; overflow:hidden;">
-        <img
-          src={image}
-          alt={title}
-          style="max-width:100%; max-height:100%; object-fit:contain;"
-        />
+        <img src={image} alt={title} style="max-width:100%; max-height:100%; object-fit:contain;" />
       </div>
     )}
   </div>
 </div>
 
 <script define:vars={{ cardId, pdfUrl }}>
-  const trigger  = document.getElementById('trigger-' + cardId);
-  const lightbox = document.getElementById('lightbox-' + cardId);
-  const closeBtn = document.getElementById('close-' + cardId);
+  const trigger     = document.getElementById('trigger-' + cardId);
+  const hoverTrig   = document.getElementById('hover-trigger-' + cardId);
+  const hovercard   = document.getElementById('hovercard-' + cardId);
+  const lightbox    = document.getElementById('lightbox-' + cardId);
+  const closeBtn    = document.getElementById('close-' + cardId);
+  const wrap        = hovercard?.closest('.project-card-wrap');
 
+  // Hovercard logic
+  let hideTimer = null;
+
+  function showHover() {
+    clearTimeout(hideTimer);
+    if (hovercard && window.innerWidth > 768) hovercard.style.display = 'block';
+  }
+
+  function hideHover() {
+    hideTimer = setTimeout(() => {
+      if (hovercard) hovercard.style.display = 'none';
+    }, 150);
+  }
+
+  hoverTrig?.addEventListener('mouseenter', showHover);
+  hoverTrig?.addEventListener('mouseleave', hideHover);
+  hovercard?.addEventListener('mouseenter', showHover);
+  hovercard?.addEventListener('mouseleave', hideHover);
+
+  // Lightbox logic
   function openLightbox() {
     lightbox.style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -125,7 +186,6 @@ const cardId = Math.random().toString(36).slice(2, 8);
     }
   });
 
-  // PDF.js slideshow
   let pdfDoc = null;
   let currentPage = 1;
   let rendering = false;
@@ -134,8 +194,6 @@ const cardId = Math.random().toString(36).slice(2, 8);
   async function initPdf() {
     if (pdfInitialized) return;
     pdfInitialized = true;
-
-    // Load PDF.js via script tag
     await new Promise((resolve) => {
       if (window.pdfjsLib) { resolve(); return; }
       const script = document.createElement('script');
@@ -143,10 +201,8 @@ const cardId = Math.random().toString(36).slice(2, 8);
       script.onload = () => resolve();
       document.head.appendChild(script);
     });
-
     const pdfjsLib = window.pdfjsLib;
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
     pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
     updatePageInfo();
     renderPage(1);
@@ -176,17 +232,11 @@ const cardId = Math.random().toString(36).slice(2, 8);
   }
 
   function nextPage() {
-    if (pdfDoc && currentPage < pdfDoc.numPages) {
-      currentPage++;
-      renderPage(currentPage);
-    }
+    if (pdfDoc && currentPage < pdfDoc.numPages) { currentPage++; renderPage(currentPage); }
   }
 
   function prevPage() {
-    if (pdfDoc && currentPage > 1) {
-      currentPage--;
-      renderPage(currentPage);
-    }
+    if (pdfDoc && currentPage > 1) { currentPage--; renderPage(currentPage); }
   }
 
   document.getElementById('next-' + cardId)?.addEventListener('click', (e) => { e.stopPropagation(); nextPage(); });
