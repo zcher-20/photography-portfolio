@@ -4,7 +4,7 @@ export default function HeroName({ name }: { name: string }) {
   return (
     <Letter3DSwap
       as="span"
-      mainClassName=""
+      mainClassName="justify-center"
       frontFaceClassName="bg-white"
       secondFaceClassName="bg-white"
       rotateDirection="top"
