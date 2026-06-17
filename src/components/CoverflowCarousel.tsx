@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { motion, AnimatePresence } from "motion/react"
+import { motion } from "motion/react"
 
 interface Props {
   images: string[]
@@ -22,9 +22,7 @@ export default function CoverflowCarousel({ images }: Props) {
   }
 
   return (
-    <div
-      style={{ perspective: "1200px", position: "relative", width: "100%", height: "420px", overflow: "hidden" }}
-    >
+    <div style={{ perspective: "1200px", position: "relative", width: "100%", height: "340px", overflow: "hidden" }}>
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
         {images.map((src, i) => {
           const offset = getOffset(i)
@@ -32,33 +30,23 @@ export default function CoverflowCarousel({ images }: Props) {
           if (absOffset > 2) return null
 
           const rotateY = offset * 45
-          const translateX = offset * 220
-          const translateZ = -absOffset * 150
-          const scale = 1 - absOffset * 0.15
+          const translateX = offset * 280
+          const translateZ = -absOffset * 180
+          const scale = 1 - absOffset * 0.12
           const opacity = 1 - absOffset * 0.3
-          const zIndex = total - absOffset
 
           return (
             <motion.div
               key={i}
-              animate={{
-                rotateY,
-                x: translateX,
-                z: translateZ,
-                scale,
-                opacity,
-              }}
+              animate={{ rotateY, x: translateX, z: translateZ, scale, opacity }}
               transition={{ type: "spring", stiffness: 200, damping: 30 }}
               style={{
                 position: "absolute",
-                width: "320px",
-                height: "380px",
-                borderRadius: "12px",
+                width: "480px",
+                height: "300px",
                 overflow: "hidden",
-                boxShadow: offset === 0
-                  ? "0 20px 60px rgba(0,0,0,0.15)"
-                  : "0 10px 30px rgba(0,0,0,0.1)",
-                zIndex,
+                boxShadow: offset === 0 ? "0 8px 30px rgba(0,0,0,0.12)" : "0 4px 16px rgba(0,0,0,0.08)",
+                zIndex: total - absOffset,
                 transformStyle: "preserve-3d",
                 cursor: offset === 0 ? "default" : "pointer",
               }}
@@ -67,56 +55,46 @@ export default function CoverflowCarousel({ images }: Props) {
               <img
                 src={src}
                 alt=""
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  display: "block",
-                  borderRadius: "12px",
-                }}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
               />
             </motion.div>
           )
         })}
       </div>
 
-      {/* Navigation arrows */}
       <button
         onClick={prev}
         style={{
-          position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)",
-          width: "40px", height: "40px", borderRadius: "50%", border: "none",
-          background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-          cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: "18px", color: "#333", zIndex: 20,
+          position: "absolute", left: "20px", top: "50%", transform: "translateY(-50%)",
+          background: "none", border: "none", cursor: "pointer",
+          fontSize: "24px", color: "#999", zIndex: 20, padding: "8px",
+          lineHeight: 1,
         }}
         aria-label="Previous"
       >‹</button>
       <button
         onClick={next}
         style={{
-          position: "absolute", right: "16px", top: "50%", transform: "translateY(-50%)",
-          width: "40px", height: "40px", borderRadius: "50%", border: "none",
-          background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-          cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: "18px", color: "#333", zIndex: 20,
+          position: "absolute", right: "20px", top: "50%", transform: "translateY(-50%)",
+          background: "none", border: "none", cursor: "pointer",
+          fontSize: "24px", color: "#999", zIndex: 20, padding: "8px",
+          lineHeight: 1,
         }}
         aria-label="Next"
       >›</button>
 
-      {/* Dots */}
-      <div style={{ position: "absolute", bottom: "12px", left: "50%", transform: "translateX(-50%)", display: "flex", gap: "8px", zIndex: 20 }}>
+      <div style={{ position: "absolute", bottom: "8px", left: "50%", transform: "translateX(-50%)", display: "flex", gap: "6px", zIndex: 20 }}>
         {images.map((_, i) => (
           <button
             key={i}
             onClick={() => setActive(i)}
             style={{
-              width: "8px", height: "8px", borderRadius: "50%", border: "none",
-              background: i === active ? "#333" : "#ccc",
+              width: "5px", height: "5px", borderRadius: "50%", border: "none",
+              background: i === active ? "#555" : "#ccc",
               cursor: "pointer", padding: 0,
               transition: "background 0.2s",
             }}
-            aria-label={`Go to slide ${i + 1}`}
+            aria-label={`Slide ${i + 1}`}
           />
         ))}
       </div>
