@@ -50,18 +50,18 @@ const BOOKS = [
     </div>
   </section>
 
-  <section class="mt-8 max-w-2xl mx-auto px-6 mb-20 scroll-reveal">
+  <section class="mt-8 max-w-4xl mx-auto px-6 mb-20 scroll-reveal">
     <h1 class="font-bold text-3xl mb-6 text-center">Reading the World</h1>
-    <ul class="grid grid-cols-2 gap-x-8 gap-y-3">
+    <table class="w-full text-sm" style="border-collapse:separate; border-spacing:0 0.5rem;">
       {BOOKS.map((book) => (
-        <li class="flex items-baseline gap-2 text-sm">
-          <span class="opacity-60 shrink-0">{book.country}</span>
-          <span class="opacity-30">–</span>
-          <span class="font-medium">{book.title}</span>
-          {book.author && <span class="opacity-60 hidden sm:inline">by {book.author}{book.favorite ? " *" : ""}</span>}
-        </li>
+        <tr>
+          <td class="opacity-60 pr-4 whitespace-nowrap" style="width:1%; white-space:nowrap;">{book.country}</td>
+          <td class="opacity-30 pr-4" style="width:1%;">–</td>
+          <td class="font-medium pr-6 whitespace-nowrap">{book.title}</td>
+          <td class="opacity-60 whitespace-nowrap">{book.author}{book.favorite ? " *" : ""}</td>
+        </tr>
       ))}
-    </ul>
+    </table>
     <p class="text-xs opacity-40 mt-8">* personal favourite</p>
   </section>
 </Layout>
