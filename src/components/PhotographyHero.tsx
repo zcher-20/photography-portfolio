@@ -148,7 +148,7 @@ export default function PhotographyHero() {
         <MarqueeAlongSvgPath
           path={RECT_PATH}
           viewBox="0 0 1200 600"
-          baseVelocity={3}
+          baseVelocity={0.8}
           slowdownOnHover={true}
           repeat={2}
           className="w-full h-full"
@@ -156,7 +156,7 @@ export default function PhotographyHero() {
           enableRollingZIndex={false}
         >
           {MARQUEE_IMAGES.map((src, i) => (
-            <div key={i} style={{ width: "80px", height: "60px" }}>
+            <div key={i} style={{ width: "160px", height: "120px" }}>
               <img
                 src={src}
                 alt=""
