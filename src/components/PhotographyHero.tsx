@@ -110,7 +110,7 @@ function Floating({
   )
 }
 
-function FloatingElement({ children, className, depth = 1 }: { children: ReactNode; className?: string; depth?: number }) {
+function FloatingElement({ children, className, depth = 1, style }: { children: ReactNode; className?: string; depth?: number; style?: React.CSSProperties }) {
   const elementRef = useRef<HTMLDivElement>(null)
   const idRef = useRef(Math.random().toString(36).substring(7))
   const context = useContext(FloatingContext)
@@ -122,7 +122,7 @@ function FloatingElement({ children, className, depth = 1 }: { children: ReactNo
   }, [depth, context])
 
   return (
-    <div ref={elementRef} className={className} style={{ position: "absolute", willChange: "transform" }}>
+    <div ref={elementRef} className={className} style={{ position: "absolute", willChange: "transform", ...style }}>
       {children}
     </div>
   )
@@ -259,9 +259,9 @@ export default function PhotographyHero() {
           zIndex: 4,
         }}
       >
-        <Floating sensitivity={-1} className="overflow-hidden">
+        <Floating sensitivity={-1}>
           {floatingLayout.map((pos, i) => (
-            <FloatingElement key={i} depth={pos.depth} className={`top-[${pos.top}] left-[${pos.left}]`}>
+            <FloatingElement key={i} depth={pos.depth} style={{ top: pos.top, left: pos.left }}>
               <motion.img
                 initial={{ opacity: 0 }}
                 src={FLOATING_IMAGES[i]}
@@ -269,9 +269,7 @@ export default function PhotographyHero() {
                   width: pos.w,
                   height: pos.h,
                   objectFit: "cover",
-                  position: "absolute",
-                  top: pos.top,
-                  left: pos.left,
+                  display: "block",
                 }}
               />
             </FloatingElement>
