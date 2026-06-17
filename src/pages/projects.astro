@@ -32,9 +32,7 @@ const other = projectsPageContent.projects.filter(p => !p.featured && !p.isPubli
       </div>
     )}
 
-    <!-- Research Publications -->
     <div class="mt-10 mb-20">
-      <h2 class="text-xs uppercase tracking-widest opacity-40 mb-6">Research Publications</h2>
       <div class="grid grid-cols-1 group">
         {publications.map((project) => (
           <ProjectCard {...project} />
