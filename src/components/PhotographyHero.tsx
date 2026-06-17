@@ -1,15 +1,7 @@
 "use client"
 
-import {
-  createContext,
-  useContext,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react"
-import type { ReactNode, RefObject } from "react"
-import { useAnimationFrame, motion, stagger, useAnimate } from "motion/react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import MarqueeAlongSvgPath from "./MarqueeAlongSvgPath"
 
 const PHOTOS = [
   "/photography/thumbs/trail--100_1775.webp",
@@ -24,7 +16,6 @@ const PHOTOS = [
   "/photography/thumbs/trail--IMG_3857.webp",
   "/photography/thumbs/trail--IMG_6484.webp",
   "/photography/thumbs/trail--IMG_6875.webp",
-  "/photography/thumbs/trail--IMG_6875.webp",
   "/photography/thumbs/trail--IMG_8531.webp",
   "/photography/thumbs/trail--IMG_9023.webp",
   "/photography/thumbs/trail--IMG_9108.webp",
@@ -33,102 +24,15 @@ const PHOTOS = [
   "/photography/thumbs/trail--Tezza-5653.webp",
 ]
 
-const FLOATING_IMAGES = [
+const MARQUEE_IMAGES = [
   PHOTOS[0], PHOTOS[2], PHOTOS[4], PHOTOS[6],
-  PHOTOS[8], PHOTOS[10], PHOTOS[14], PHOTOS[17],
+  PHOTOS[8], PHOTOS[10], PHOTOS[13], PHOTOS[15],
+  PHOTOS[1], PHOTOS[5], PHOTOS[9], PHOTOS[16],
 ]
 
-// --- Mouse position hook ---
-function useMousePositionRef(containerRef: RefObject<HTMLElement | null>) {
-  const positionRef = useRef({ x: 0, y: 0 })
+const RECT_PATH =
+  "M-20,-10 L1220,-10 Q1240,-10 1240,10 L1240,590 Q1240,610 1220,610 L-20,610 Q-40,610 -40,590 L-40,10 Q-40,-10 -20,-10"
 
-  useEffect(() => {
-    const handleMouseMove = (ev: MouseEvent) => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect()
-        positionRef.current = { x: ev.clientX - rect.left, y: ev.clientY - rect.top }
-      }
-    }
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [containerRef])
-
-  return positionRef
-}
-
-// --- Floating context ---
-interface FloatingContextType {
-  registerElement: (id: string, element: HTMLDivElement, depth: number) => void
-  unregisterElement: (id: string) => void
-}
-
-const FloatingContext = createContext<FloatingContextType | null>(null)
-
-function Floating({
-  children,
-  className,
-  sensitivity = 1,
-  easingFactor = 0.05,
-}: {
-  children: ReactNode
-  className?: string
-  sensitivity?: number
-  easingFactor?: number
-}) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const elementsMap = useRef(
-    new Map<string, { element: HTMLDivElement; depth: number; currentPosition: { x: number; y: number } }>()
-  )
-  const mousePositionRef = useMousePositionRef(containerRef)
-
-  const registerElement = useCallback((id: string, element: HTMLDivElement, depth: number) => {
-    elementsMap.current.set(id, { element, depth, currentPosition: { x: 0, y: 0 } })
-  }, [])
-
-  const unregisterElement = useCallback((id: string) => {
-    elementsMap.current.delete(id)
-  }, [])
-
-  useAnimationFrame(() => {
-    if (!containerRef.current) return
-    elementsMap.current.forEach((data) => {
-      const strength = (data.depth * sensitivity) / 20
-      const newTargetX = mousePositionRef.current.x * strength
-      const newTargetY = mousePositionRef.current.y * strength
-      data.currentPosition.x += (newTargetX - data.currentPosition.x) * easingFactor
-      data.currentPosition.y += (newTargetY - data.currentPosition.y) * easingFactor
-      data.element.style.transform = `translate3d(${data.currentPosition.x}px, ${data.currentPosition.y}px, 0)`
-    })
-  })
-
-  return (
-    <FloatingContext.Provider value={{ registerElement, unregisterElement }}>
-      <div ref={containerRef} className={className} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}>
-        {children}
-      </div>
-    </FloatingContext.Provider>
-  )
-}
-
-function FloatingElement({ children, className, depth = 1, style }: { children: ReactNode; className?: string; depth?: number; style?: React.CSSProperties }) {
-  const elementRef = useRef<HTMLDivElement>(null)
-  const idRef = useRef(Math.random().toString(36).substring(7))
-  const context = useContext(FloatingContext)
-
-  useEffect(() => {
-    if (!elementRef.current || !context) return
-    context.registerElement(idRef.current, elementRef.current, depth)
-    return () => context.unregisterElement(idRef.current)
-  }, [depth, context])
-
-  return (
-    <div ref={elementRef} className={className} style={{ position: "absolute", willChange: "transform", ...style }}>
-      {children}
-    </div>
-  )
-}
-
-// --- Main component ---
 export default function PhotographyHero() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const [isMoving, setIsMoving] = useState(false)
@@ -137,15 +41,9 @@ export default function PhotographyHero() {
   const lastYRef = useRef(0)
   const distAccumRef = useRef(0)
   const photoIndexRef = useRef(0)
-  const [scope, animate] = useAnimate()
 
   useEffect(() => {
     PHOTOS.forEach((src) => { const i = new Image(); i.src = src })
-  }, [])
-
-  useEffect(() => {
-    if (!scope.current) return
-    animate("img", { opacity: [0, 1] }, { duration: 0.5, delay: stagger(0.12) })
   }, [])
 
   const spawnPhoto = useCallback((x: number, y: number) => {
@@ -201,17 +99,6 @@ export default function PhotographyHero() {
     clearTimeout(moveTimeoutRef.current)
   }, [])
 
-  const floatingLayout = [
-    { top: "8%", left: "6%", w: "120px", h: "90px", depth: 0.5 },
-    { top: "5%", left: "30%", w: "140px", h: "100px", depth: 1 },
-    { top: "3%", left: "62%", w: "130px", h: "170px", depth: 2 },
-    { top: "8%", left: "85%", w: "110px", h: "90px", depth: 1 },
-    { top: "55%", left: "3%", w: "140px", h: "110px", depth: 1.5 },
-    { top: "60%", left: "78%", w: "130px", h: "160px", depth: 2 },
-    { top: "70%", left: "20%", w: "150px", h: "100px", depth: 3 },
-    { top: "65%", left: "52%", w: "120px", h: "100px", depth: 1 },
-  ]
-
   return (
     <section
       ref={sectionRef}
@@ -247,9 +134,8 @@ export default function PhotographyHero() {
         Photography
       </h1>
 
-      {/* Floating parallax images - visible when idle */}
+      {/* Marquee along rectangular path */}
       <div
-        ref={scope}
         style={{
           position: "absolute",
           inset: 0,
@@ -259,22 +145,27 @@ export default function PhotographyHero() {
           zIndex: 4,
         }}
       >
-        <Floating sensitivity={-1}>
-          {floatingLayout.map((pos, i) => (
-            <FloatingElement key={i} depth={pos.depth} style={{ top: pos.top, left: pos.left }}>
-              <motion.img
-                initial={{ opacity: 0 }}
-                src={FLOATING_IMAGES[i]}
-                style={{
-                  width: pos.w,
-                  height: pos.h,
-                  objectFit: "cover",
-                  display: "block",
-                }}
+        <MarqueeAlongSvgPath
+          path={RECT_PATH}
+          viewBox="0 0 1200 600"
+          baseVelocity={3}
+          slowdownOnHover={true}
+          repeat={2}
+          className="w-full h-full"
+          responsive
+          enableRollingZIndex={false}
+        >
+          {MARQUEE_IMAGES.map((src, i) => (
+            <div key={i} style={{ width: "80px", height: "60px" }}>
+              <img
+                src={src}
+                alt=""
+                draggable={false}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
               />
-            </FloatingElement>
+            </div>
           ))}
-        </Floating>
+        </MarqueeAlongSvgPath>
       </div>
     </section>
   )
