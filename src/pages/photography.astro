@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { identity } from "../config";
+import PhotographyHero from "../components/PhotographyHero";
 
 const PHOTOS = [
   "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
@@ -25,17 +26,8 @@ const PHOTOS = [
     image: identity.logo,
   }}
 >
-  <!-- Trail section -->
-  <section
-    id="trail-section"
-    style="position:relative; width:100%; height:90vh; overflow:hidden; cursor:crosshair; background:#fff;"
-  >
-    <h1
-      id="photo-title"
-      style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:clamp(3rem,10vw,7rem); font-weight:700; letter-spacing:-0.03em; color:#111; pointer-events:none; z-index:10; white-space:nowrap; transition:opacity 0.4s; user-select:none;"
-    >Photography</h1>
-    
-  </section>
+  <!-- Trail section with parallax floating -->
+  <PhotographyHero client:load />
 
   <!-- Gallery marquee section -->
   <section class="mt-16 mb-4 scroll-reveal">
@@ -81,90 +73,6 @@ const PHOTOS = [
 
 <script is:inline>
   (function () {
-    // Trail effect
-        var PHOTOS = [
-      "/photography/thumbs/trail--100_1775.webp",
-      "/photography/thumbs/trail--IMG_0005.webp",
-      "/photography/thumbs/trail--IMG_0064.webp",
-      "/photography/thumbs/trail--IMG_0145.webp",
-      "/photography/thumbs/trail--IMG_0667.webp",
-      "/photography/thumbs/trail--IMG_0840.webp",
-      "/photography/thumbs/trail--IMG_0858.webp",
-      "/photography/thumbs/trail--IMG_1176.webp",
-      "/photography/thumbs/trail--IMG_2675.webp",
-      "/photography/thumbs/trail--IMG_3857.webp",
-      "/photography/thumbs/trail--IMG_6484.webp",
-      "/photography/thumbs/trail--IMG_6875.webp",
-      "/photography/thumbs/trail--IMG_8531.webp",
-      "/photography/thumbs/trail--IMG_9023.webp",
-      "/photography/thumbs/trail--IMG_9108.webp",
-      "/photography/thumbs/trail--IMG_9553.webp",
-      "/photography/thumbs/trail--IMG_9863.webp",
-      "/photography/thumbs/trail--Tezza-5653.webp"
-    ];
-
-    // Preload trail images so they appear instantly on hover
-    PHOTOS.forEach(function(src) { var i = new Image(); i.src = src; });
-
-    var section = document.getElementById('trail-section');
-    var title = document.getElementById('photo-title');
-    if (!section || !title) return;
-
-    var lastX = 0;
-    var lastY = 0;
-    var photoIndex = 0;
-    var threshold = 80;
-    var distAccum = 0;
-    var moveTimeout = 0;
-
-    section.addEventListener('mousemove', function (e) {
-      var rect = section.getBoundingClientRect();
-      var mouseX = e.clientX - rect.left;
-      var mouseY = e.clientY - rect.top;
-      var dx = mouseX - lastX;
-      var dy = mouseY - lastY;
-      distAccum += Math.sqrt(dx * dx + dy * dy);
-
-      title.style.opacity = '0.06';
-      clearTimeout(moveTimeout);
-      moveTimeout = window.setTimeout(function () {
-        title.style.opacity = '1';
-      }, 1500);
-
-      if (distAccum >= threshold) {
-        distAccum = 0;
-        spawnPhoto(mouseX, mouseY);
-      }
-
-      lastX = mouseX;
-      lastY = mouseY;
-    });
-
-    section.addEventListener('mouseleave', function () {
-      title.style.opacity = '1';
-    });
-
-    function spawnPhoto(x, y) {
-      var img = document.createElement('img');
-      img.decoding = 'async';
-      img.src = PHOTOS[photoIndex % PHOTOS.length];
-      photoIndex++;
-      var w = 110 + Math.random() * 70;
-      var h = w * (0.65 + Math.random() * 0.5);
-      var rotate = (Math.random() - 0.5) * 18;
-      img.style.cssText = 'position:absolute;left:' + (x - w/2) + 'px;top:' + (y - h/2) + 'px;width:' + w + 'px;height:' + h + 'px;object-fit:cover;border-radius:2px;pointer-events:none;transform:rotate(' + rotate + 'deg) scale(0.85);opacity:0;transition:opacity 0.15s ease,transform 0.15s ease;z-index:5;';
-      section.appendChild(img);
-      requestAnimationFrame(function () {
-        img.style.opacity = '1';
-        img.style.transform = 'rotate(' + rotate + 'deg) scale(1)';
-      });
-      setTimeout(function () {
-        img.style.opacity = '0';
-        img.style.transform = 'rotate(' + rotate + 'deg) scale(1.08)';
-        setTimeout(function () { img.remove(); }, 500);
-      }, 1800);
-    }
-
     // Gallery marquee
         var GALLERY = [
       "/photography/thumbs/morocco--98586D38-38FC-4F70-BCAF-1A20B19D7947.webp",
