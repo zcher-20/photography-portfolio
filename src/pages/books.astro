@@ -174,9 +174,9 @@ const BOOKS = [
     const projection = d3.geoNaturalEarth1().fitSize([width, height], geoData);
     const path = d3.geoPath().projection(projection);
     const isDark = document.documentElement.classList.contains("dark");
-    const readColor = isDark ? "#ffffff" : "#DBECFF";
+    const readColor = isDark ? "#ffffff" : "#B89EA9";
     const unreadColor = isDark ? "#1a1a1a" : "#d1d5db";
-    const glowFilter = isDark ? "drop-shadow(0 0 6px rgba(255,255,255,0.4))" : "drop-shadow(0 0 6px rgba(219,236,255,0.5))";
+    const glowFilter = isDark ? "drop-shadow(0 0 6px rgba(255,255,255,0.4))" : "drop-shadow(0 0 6px rgba(184,158,169,0.5))";
 
     svg.selectAll("path").data(geoData.features).join("path")
       .attr("d", path as any)
