@@ -53,7 +53,7 @@ export default function CoverflowCarousel({ images }: Props) {
               <img
                 src={src}
                 alt=""
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block", minWidth: "100%", minHeight: "100%" }}
               />
             </motion.div>
           )
