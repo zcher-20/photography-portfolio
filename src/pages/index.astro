@@ -4,7 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import { homePageContent, identity } from "../config";
 import SocialLink from "../components/SocialLink.astro";
 import Link from "../components/Link.astro";
-import Letter3DSwap from "../components/Letter3DSwap.astro";
+import HeroName from "../components/HeroName";
 import { getCollection } from "astro:content";
 
 let posts = await getCollection("posts");
@@ -20,7 +20,7 @@ posts.splice(3)
 <Layout seo={homePageContent.seo}>
   <section class="mt-10 max-w-2xl mx-auto px-6 scroll-reveal">
     <h1 class="font-bold text-3xl mb-8">
-      <Letter3DSwap text={identity.name} />
+      <HeroName name={identity.name} client:idle />
     </h1>
     <div class="flex items-center gap-6 mb-8">
       <Image

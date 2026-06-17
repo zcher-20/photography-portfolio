@@ -10,5 +10,13 @@ export default {
       },
     },
   },
-  plugins: [require("@tailwindcss/typography")],
+  plugins: [
+    require("@tailwindcss/typography"),
+    function({ addUtilities }) {
+      addUtilities({
+        '.transform-3d': { 'transform-style': 'preserve-3d' },
+        '.inline-box': { 'display': 'inline-block' },
+      })
+    },
+  ],
 };

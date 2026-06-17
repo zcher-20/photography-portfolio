@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/node": "^9.0.0",
+    "@astrojs/react": "^5.0.7",
     "@astrojs/rss": "^4.0.14",
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/tailwind": "^5.1.4",
@@ -22,6 +23,9 @@
     "d3": "^7.9.0",
     "marked": "^15.0.4",
     "mdast-util-to-string": "^4.0.0",
+    "motion": "^12.40.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "reading-time": "^1.5.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.3"
