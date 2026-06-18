@@ -1,8 +1,10 @@
 ---
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
-import { navBarLinks, identity } from "../config";
+import { navBarLinks, identity, socialLinks } from "../config";
 import type { SEOInfo } from "../types/config";
+import HeroName from "../components/HeroName";
+import SocialLink from "../components/SocialLink.astro";
 
 interface Props {
   seo: SEOInfo;
@@ -155,15 +157,25 @@ const fullImageURL = seo.image?.startsWith("http")
 
     <div class="md:flex md:min-h-screen">
       <!-- Sidebar (desktop only) -->
-      <aside class="hidden md:flex md:flex-col md:justify-between md:w-64 lg:w-72 md:shrink-0 md:sticky md:top-0 md:h-screen md:px-10 md:py-12 md:border-r md:border-gray-200 dark:md:border-gray-800">
-        <div>
-          <a href="/" class="block mb-1">
-            <h1 class="font-bold text-2xl tracking-tight">Zayneb Cherif</h1>
-          </a>
-          <p class="text-sm opacity-40 mb-10">CS & Design · AI Research</p>
+      <aside class="hidden md:flex md:flex-col md:items-center md:justify-between md:w-72 lg:w-80 md:shrink-0 md:sticky md:top-0 md:h-screen md:px-8 md:py-12 md:border-r md:border-gray-200 dark:md:border-gray-800">
+        <div class="flex flex-col items-center w-full">
+          <Image
+            src={identity.logo}
+            alt={identity.name}
+            width={120}
+            height={120}
+            class="rounded-full mb-5"
+          />
 
-          <nav>
-            <ul class="flex flex-col gap-1">
+          <a href="/" class="block mb-1">
+            <h1 class="font-bold text-xl tracking-tight">
+              <HeroName name={identity.name} client:idle />
+            </h1>
+          </a>
+          <p class="text-sm opacity-40 mb-8">CS & Design · AI Research</p>
+
+          <nav class="w-full mb-8">
+            <ul class="flex flex-col items-center gap-1">
               {
                 navBarLinks.map((link) => (
                   <li>
@@ -179,6 +191,19 @@ const fullImageURL = seo.image?.startsWith("http")
               }
             </ul>
           </nav>
+
+          <div class="flex flex-col items-center gap-2">
+            {
+              socialLinks.map((link) => (
+                <SocialLink
+                  title={link.title}
+                  url={link.url}
+                  icon={link.icon}
+                  external={link.external}
+                />
+              ))
+            }
+          </div>
         </div>
 
         <div class="flex items-center gap-3">
