@@ -193,8 +193,20 @@ const fullImageURL = seo.image?.startsWith("http")
           </nav>
 
           <div class="flex flex-col items-center gap-2">
+            <div class="flex items-center gap-4">
+              {
+                socialLinks.filter((l) => l.title !== "Mail").map((link) => (
+                  <SocialLink
+                    title={link.title}
+                    url={link.url}
+                    icon={link.icon}
+                    external={link.external}
+                  />
+                ))
+              }
+            </div>
             {
-              socialLinks.map((link) => (
+              socialLinks.filter((l) => l.title === "Mail").map((link) => (
                 <SocialLink
                   title={link.title}
                   url={link.url}
