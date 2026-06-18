@@ -61,7 +61,7 @@ import { identity } from "../config";
         />
       </a>
 
-      <div class="mt-6">
+      <div class="mt-6" style="position:relative;">
         <span
           id="film-album-title"
           class="text-xl font-semibold mb-2 inline-block cursor-default"
@@ -85,16 +85,16 @@ import { identity } from "../config";
             class="text-sm opacity-60 hover:opacity-100 transition-opacity underline underline-offset-2"
           >GitHub &rarr;</a>
         </div>
-      </div>
 
-      <!-- Engineering Note hovercard -->
-      <div
-        id="film-album-hovercard"
-        class="design-hovercard"
-        style="display:none;"
-      >
-        <p style="font-size:12px; color:#111; margin:0 0 8px; font-weight:700;">Engineering Note</p>
-        <p style="font-size:11px; color:#555; margin:0; line-height:1.6;">The interface maps a tall scroll container to a sticky viewport, translating scroll offset into a continuous progress value that drives the entire visual state. Keeping the animation in a single rAF loop (rather than CSS transitions) allows every visual property to track scroll velocity smoothly and avoids the jank of competing transitions. The entire app ships as one portable HTML file with zero external requests.</p>
+        <!-- Engineering Note hovercard -->
+        <div
+          id="film-album-hovercard"
+          class="design-hovercard"
+          style="display:none;"
+        >
+          <p style="font-size:12px; color:#111; margin:0 0 8px; font-weight:700;">Engineering Note</p>
+          <p style="font-size:11px; color:#555; margin:0; line-height:1.6;">The interface maps a tall scroll container to a sticky viewport, translating scroll offset into a continuous progress value that drives the entire visual state. Keeping the animation in a single rAF loop (rather than CSS transitions) allows every visual property to track scroll velocity smoothly and avoids the jank of competing transitions. The entire app ships as one portable HTML file with zero external requests.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -132,7 +132,8 @@ import { identity } from "../config";
   .design-hovercard {
     position: absolute;
     left: calc(100% + 16px);
-    top: 0;
+    top: 50%;
+    transform: translateY(-50%);
     width: 260px;
     background: #fff;
     border: 1px solid #e8e8e8;
