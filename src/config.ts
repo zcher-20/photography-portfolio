@@ -23,6 +23,7 @@ export const navBarLinks: NavBarLink[] = [
   { title: "Mind", url: "/mind" },
   { title: "Bookshelf", url: "/books" },
   { title: "Photography", url: "/photography" },
+  { title: "Design", url: "/design" },
 ];
 
 export const socialLinks: SocialLink[] = [

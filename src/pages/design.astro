@@ -1,0 +1,70 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { identity } from "../config";
+---
+
+<Layout
+  seo={{
+    title: "Design | " + identity.name,
+    description: "Design projects by Zayneb Cherif.",
+    image: identity.logo,
+  }}
+>
+  <section class="mt-10 max-w-3xl mx-auto px-6 scroll-reveal">
+    <h1 class="font-bold text-3xl mb-10 text-center">Design</h1>
+
+    <div class="mb-16">
+      <a href="https://arena-vis.vercel.app" target="_blank" rel="noopener noreferrer" class="block overflow-hidden rounded-lg hover:opacity-95 transition-opacity">
+        <img
+          src="/design-arena-vis.png"
+          alt="Are.na Visualizer"
+          class="w-full h-auto"
+        />
+      </a>
+
+      <div class="mt-6">
+        <h2 class="text-xl font-semibold mb-2">Are.na Visualizer</h2>
+        <p class="text-sm opacity-55 leading-relaxed mb-4">A visual explorer for Are.na channels — browse collections across multiple layout modes including grid, canvas, and disk views.</p>
+
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          <span class="skill-box">Tailwind CSS</span>
+          <span class="skill-box">Are.na API</span>
+          <span class="skill-box">TypeScript 5</span>
+          <span class="skill-box">React 19</span>
+          <span class="skill-box">Next.js 16</span>
+          <span class="skill-box">Vercel</span>
+        </div>
+
+        <div class="flex gap-4">
+          <a
+            href="https://arena-vis.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm opacity-60 hover:opacity-100 transition-opacity underline underline-offset-2"
+          >Live site &rarr;</a>
+          <a
+            href="https://github.com/zcher-20/arena-vis"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm opacity-60 hover:opacity-100 transition-opacity underline underline-offset-2"
+          >GitHub &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .skill-box {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 3px 8px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
+    background: transparent;
+    color: #6b7280;
+    font-family: inherit;
+    line-height: 1.4;
+  }
+</style>
