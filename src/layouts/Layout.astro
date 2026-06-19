@@ -163,80 +163,59 @@ const fullImageURL = seo.image?.startsWith("http")
 
     <div class="md:flex md:min-h-screen">
       <!-- Sidebar (desktop only) -->
-      <aside transition:persist="sidebar" class="hidden md:flex md:flex-col md:items-center md:justify-between md:w-72 lg:w-80 md:shrink-0 md:sticky md:top-0 md:h-screen md:px-8 md:py-12 md:border-r md:border-gray-200 dark:md:border-gray-800">
-        <div class="flex flex-col items-center">
+      <aside transition:persist="sidebar" class="hidden md:flex md:flex-col md:justify-between md:w-72 lg:w-80 md:shrink-0 md:sticky md:top-0 md:h-screen md:px-8 md:py-10 md:border-r md:border-gray-200 dark:md:border-gray-800">
+        <div>
+          <a href="/" class="block mb-8">
+            <h1 class="text-sm font-normal" style="letter-spacing:0.25em; text-transform:uppercase;">[ Zayneb Cherif ]</h1>
+          </a>
+
           <img
             src={identity.logo}
             alt={identity.name}
-            width="120"
-            height="120"
-            class="rounded-full mb-5"
+            width="180"
+            height="180"
+            class="mb-8 w-full max-w-[180px]"
+            style="object-fit:cover;"
             loading="eager"
             fetchpriority="high"
           />
 
-          <a href="/" class="block mb-1">
-            <h1 class="font-bold text-xl tracking-tight">
-              <HeroName name={identity.name} client:load />
-            </h1>
-          </a>
-          <p class="text-sm opacity-40">CS & Design · AI Research</p>
-        </div>
+          <div class="mb-8" style="font-size:12px; line-height:1.6; opacity:0.55;">
+            <a href="mailto:zaynebcheriff@gmail.com" class="block hover:opacity-80">[em] zaynebcheriff@gmail.com</a>
+            <a href="https://github.com/zcher-20" target="_blank" class="block hover:opacity-80">[gh] zcher-20</a>
+            <a href="https://www.linkedin.com/in/zayneb-cherif-830294251/" target="_blank" class="block hover:opacity-80">[li] zayneb-cherif</a>
+          </div>
 
-        <nav>
-          <ul class="flex flex-col items-center gap-1">
-            {
-              navBarLinks.map((link) => (
-                <li>
-                  <a
-                    class="block py-1 opacity-60 hover:opacity-100 transition-opacity text-sm"
-                    href={link.url}
-                    target={link.external ? "_blank" : "_self"}
-                  >
-                    {link.title}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
-
-        <div class="flex flex-col items-center gap-4">
-          <div class="flex flex-col items-center gap-2">
-            <div class="flex items-center gap-4">
+          <nav>
+            <ul class="flex flex-col gap-2">
               {
-                socialLinks.filter((l) => l.title !== "Mail").map((link) => (
-                  <SocialLink
-                    title={link.title}
-                    url={link.url}
-                    icon={link.icon}
-                    external={link.external}
-                  />
+                navBarLinks.map((link) => (
+                  <li>
+                    <a
+                      class="block opacity-70 hover:opacity-100 transition-opacity"
+                      style="font-size:13px;"
+                      href={link.url}
+                      target={link.external ? "_blank" : "_self"}
+                    >
+                      [ {link.title} ]
+                    </a>
+                  </li>
                 ))
               }
-            </div>
-            {
-              socialLinks.filter((l) => l.title === "Mail").map((link) => (
-                <SocialLink
-                  title={link.title}
-                  url={link.url}
-                  icon={link.icon}
-                  external={link.external}
-                />
-              ))
-            }
-          </div>
-          <div class="flex items-center gap-3">
+            </ul>
+          </nav>
+        </div>
+
+        <div class="flex items-center gap-3">
           <button
             id="theme-toggle"
-            class="p-2 rounded-lg hover:bg-gray-bg-light dark:hover:bg-gray-bg opacity-60 hover:opacity-100 transition-all"
+            class="p-1 rounded hover:bg-gray-bg-light dark:hover:bg-gray-bg opacity-40 hover:opacity-100 transition-all"
             aria-label="Toggle theme"
           >
-            <Icon name="mdi:weather-sunny" class="w-4 h-4 hidden dark:block" />
-            <Icon name="mdi:weather-night" class="w-4 h-4 block dark:hidden" />
+            <Icon name="mdi:weather-sunny" class="w-3.5 h-3.5 hidden dark:block" />
+            <Icon name="mdi:weather-night" class="w-3.5 h-3.5 block dark:hidden" />
           </button>
-          <span class="text-xs opacity-40">© 2026</span>
-          </div>
+          <span style="font-size:11px; opacity:0.3;">© 2026</span>
         </div>
       </aside>
 
@@ -272,10 +251,11 @@ const fullImageURL = seo.image?.startsWith("http")
 </html>
 
 <style is:global>
-  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Inter:wght@100..900&display=swap");
 
   html {
-    font-family: "Inter", sans-serif;
+    font-family: "EB Garamond", Georgia, "Times New Roman", serif;
+    font-size: 15px;
   }
 
   * {
