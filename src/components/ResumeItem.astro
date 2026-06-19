@@ -24,7 +24,7 @@ const { title, company, date, description } = Astro.props;
         <h3 class="font-medium text-lg">{title}</h3>
         <p class="text-sm opacity-60 mb-2">{company.name}</p>
         {description && (
-          <p class="text-sm opacity-80 leading-relaxed">{description}</p>
+          <p class="text-sm opacity-80 leading-relaxed" set:html={description} />
         )}
       </div>
     </div>
