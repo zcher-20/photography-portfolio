@@ -209,7 +209,7 @@ export const workPageContent: WorkPageContent = {
       title: "AI / ML Research Intern",
       company: { name: "Al Akhawayn University", image: "/akhawayn.png", url: "https://www.aui.ma" },
       date: "Jul 2026",
-      description: "Conducting AI/ML research as part of a competitive remote internship, applying machine learning methods to structured research problems under <a href=\"https://aui.ma/teacher-bio/houda-chakiri\" target=\"_blank\" style=\"text-decoration:underline; text-underline-offset:2px;\">Dr. Houda Chakiri</a>.",
+      description: "Developing an AI-powered forest fire risk prediction framework for Morocco's Middle Atlas region under <a href=\"https://aui.ma/teacher-bio/houda-chakiri\" target=\"_blank\" style=\"text-decoration:underline; text-underline-offset:2px;\">Dr. Houda Chakiri</a> as part of the RICER initiative; integrating GIS, Earth Observation data, and IBM/NASA Prithvi foundation models to learn environmental representations directly from satellite imagery.",
     },
     {
       title: "Career Fellow — Tech / SWE Track",
