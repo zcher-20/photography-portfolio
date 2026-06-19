@@ -203,7 +203,7 @@ export const workPageContent: WorkPageContent = {
       title: "Agentic AI & ML Intern",
       company: { name: "MIT-Incubated Stealth AI Startup", image: "/startup.webp", url: "#" },
       date: "Jun - Aug 2026",
-      description: "Building RAG pipelines with FAISS, LangChain, and LlamaIndex; developing FastAPI backend services for document ingestion and semantic search across SharePoint and SQL data sources.",
+      description: "Building and evaluating production-facing AI agents with prompt engineering, model evaluation, and workflow design. Running large-scale testing of agentic AI systems and identifying optimization opportunities.",
     },
     {
       title: "AI / ML Research Intern",
