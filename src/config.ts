@@ -127,7 +127,7 @@ export const projectsPageContent: ProjectPageContent = {
     {
       title: "SkinKit — On-Skin Interface Prototyping",
       description: "Modular toolkit for prototyping on-skin interfaces using flexible PCB modules assembled directly on the body. Built with Cornell University's Hybrid Body Lab, spanning applications from health monitoring to expressive on-body fashion.",
-      image: "/project-skinkit.png",
+      image: "/project-skinkit.jpg",
       url: "https://www.hybridbody.human.cornell.edu/#/skinkit/",
       featured: true,
       venue: "Cornell University — Hybrid Body Lab",
