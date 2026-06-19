@@ -215,7 +215,7 @@ export const workPageContent: WorkPageContent = {
       title: "Career Fellow — Tech / SWE Track",
       company: { name: "SEO (Sponsors for Educational Opportunity)", image: "/seo.jpg", url: "https://career.seo-usa.org/" },
       date: "2026 - Present",
-      description: "Selected for SEO's competitive Career Fellowship; receiving mentorship, technical interview preparation, and recruiting support targeting top-tier SWE roles.",
+      description: "Selected for SEO's competitive <a href=\"https://career.seo-usa.org/\" target=\"_blank\" style=\"text-decoration:underline; text-underline-offset:2px;\">Career Fellowship</a>; receiving mentorship, technical interview preparation, and recruiting support targeting top-tier SWE roles.",
     },
     {
       title: "Development Board",
