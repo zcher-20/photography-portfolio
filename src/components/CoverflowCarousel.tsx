@@ -22,14 +22,14 @@ export default function CoverflowCarousel({ images }: Props) {
   }
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "340px", overflow: "hidden" }}>
+    <div style={{ position: "relative", width: "100%", height: "280px", overflow: "hidden" }}>
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
         {images.map((src, i) => {
           const offset = getOffset(i)
           const absOffset = Math.abs(offset)
           if (absOffset > 2) return null
 
-          const translateX = offset * 320
+          const translateX = offset * 280
           const scale = absOffset === 0 ? 1 : 0.8
           const opacity = 1 - absOffset * 0.25
           const zIndex = total - absOffset
@@ -37,12 +37,13 @@ export default function CoverflowCarousel({ images }: Props) {
           return (
             <motion.div
               key={i}
+              initial={false}
               animate={{ x: translateX, scale, opacity }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
               style={{
                 position: "absolute",
-                width: "480px",
-                height: "300px",
+                width: "400px",
+                height: "250px",
                 overflow: "hidden",
                 boxShadow: offset === 0 ? "0 8px 30px rgba(0,0,0,0.12)" : "0 4px 16px rgba(0,0,0,0.08)",
                 zIndex,
