@@ -100,7 +100,7 @@ const { title, company, date, description } = Astro.props;
 
     var timer = null;
 
-    document.addEventListener('mouseenter', function(e) {
+    document.addEventListener('mouseover', function(e) {
       var link = e.target.closest('.resume-desc a');
       if (!link) return;
 
@@ -120,14 +120,14 @@ const { title, company, date, description } = Astro.props;
         preview.style.top = (rect.bottom + 8) + 'px';
         preview.classList.add('visible');
       } catch(err) {}
-    }, true);
+    });
 
-    document.addEventListener('mouseleave', function(e) {
+    document.addEventListener('mouseout', function(e) {
       var link = e.target.closest('.resume-desc a');
       if (!link) return;
       timer = setTimeout(function() {
         preview.classList.remove('visible');
       }, 100);
-    }, true);
+    });
   })();
 </script>
