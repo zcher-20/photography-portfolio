@@ -1,21 +1,44 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { identity } from "../config";
-import PhotographyHero from "../components/PhotographyHero";
 
-const PHOTOS = [
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
-  "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=80",
-  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80",
-  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80",
-  "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=600&q=80",
-  "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=600&q=80",
-  "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=80",
-  "https://images.unsplash.com/photo-1504700610630-ac6aba3536d3?w=600&q=80",
-  "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80",
-  "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&q=80",
-  "https://images.unsplash.com/photo-1510784722466-f2aa240d2699?w=600&q=80",
-  "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80",
+const morocco = [
+  "/photography/thumbs/morocco--98586D38-38FC-4F70-BCAF-1A20B19D7947.webp",
+  "/photography/thumbs/morocco--IMG_3049.webp",
+  "/photography/thumbs/morocco--IMG_7172.webp",
+  "/photography/thumbs/morocco--IMG_8971.webp",
+  "/photography/thumbs/morocco--IMG_9150.webp",
+  "/photography/thumbs/morocco--IMG_9172.webp",
+  "/photography/thumbs/morocco--IMG_9295.webp",
+  "/photography/thumbs/morocco--IMG_9553.webp",
+  "/photography/thumbs/morocco--Tezza-5653.webp",
+];
+
+const spain = [
+  "/photography/thumbs/spain--IMG_1036.webp",
+  "/photography/thumbs/spain--IMG_1065.webp",
+  "/photography/thumbs/spain--IMG_3242.webp",
+  "/photography/thumbs/spain--IMG_5296.webp",
+  "/photography/thumbs/spain--IMG_5336.webp",
+  "/photography/thumbs/spain--IMG_5660.webp",
+  "/photography/thumbs/spain--IMG_6780.webp",
+  "/photography/thumbs/spain--IMG_6797.webp",
+];
+
+const switzerland = [
+  "/photography/thumbs/switzerland--A9CAAB5F-644C-4EA6-96E6-193BB256629B.webp",
+  "/photography/thumbs/switzerland--IMG_0403.webp",
+  "/photography/thumbs/switzerland--IMG_0435.webp",
+  "/photography/thumbs/switzerland--IMG_0913.webp",
+  "/photography/thumbs/switzerland--IMG_1154.webp",
+  "/photography/thumbs/switzerland--IMG_1414.webp",
+  "/photography/thumbs/switzerland--IMG_1551.webp",
+  "/photography/thumbs/switzerland--IMG_1661.webp",
+  "/photography/thumbs/switzerland--IMG_1857.webp",
+  "/photography/thumbs/switzerland--IMG_2243.webp",
+  "/photography/thumbs/switzerland--IMG_2261.webp",
+  "/photography/thumbs/switzerland--IMG_2707.webp",
+  "/photography/thumbs/switzerland--IMG_9831.webp",
 ];
 ---
 
@@ -26,183 +49,242 @@ const PHOTOS = [
     image: identity.logo,
   }}
 >
-  <!-- Trail section with parallax floating -->
-  <PhotographyHero client:load />
-
-  <!-- Gallery marquee section -->
-  <section class="mt-16 mb-4 scroll-reveal">
-    <div class="max-w-2xl mx-auto px-6 mb-6 text-center">
-      <h1 class="font-bold text-3xl mb-1">Morocco</h1>
+  <section class="pt-20 pl-3 pr-3 scroll-reveal">
+    <div class="photo-section">
+      <p class="photo-label">[ Morocco ]</p>
+      <div class="photo-strip">
+        {morocco.map((src, i) => (
+          <img src={src} alt="" loading="lazy" decoding="async" class={i === 3 ? "color" : ""} />
+        ))}
+      </div>
     </div>
-    <div style="overflow:hidden; width:100%; position:relative;">
-      <div style="position:absolute; left:0; top:0; bottom:0; width:80px; background:linear-gradient(to right, white, transparent); z-index:2; pointer-events:none;"></div>
-      <div style="position:absolute; right:0; top:0; bottom:0; width:80px; background:linear-gradient(to left, white, transparent); z-index:2; pointer-events:none;"></div>
-      <div id="gallery-track" style="display:flex; gap:12px; width:max-content; will-change:transform; padding:8px 0 16px;"></div>
-    </div>
-  </section>
 
-
-  <!-- Spain marquee section -->
-  <section class="mt-16 mb-4 scroll-reveal">
-    <div class="max-w-2xl mx-auto px-6 mb-6 text-center">
-      <h1 class="font-bold text-3xl mb-1">Spain</h1>
+    <div class="photo-section">
+      <p class="photo-label">[ Switzerland ]</p>
+      <div class="photo-strip">
+        {switzerland.map((src, i) => (
+          <img src={src} alt="" loading="lazy" decoding="async" class={i === 2 ? "color" : ""} />
+        ))}
+      </div>
     </div>
-    <div style="overflow:hidden; width:100%; position:relative;">
-      <div style="position:absolute; left:0; top:0; bottom:0; width:80px; background:linear-gradient(to right, white, transparent); z-index:2; pointer-events:none;"></div>
-      <div style="position:absolute; right:0; top:0; bottom:0; width:80px; background:linear-gradient(to left, white, transparent); z-index:2; pointer-events:none;"></div>
-      <div id="spain-track" style="display:flex; gap:12px; width:max-content; will-change:transform; padding:8px 0 16px;"></div>
-    </div>
-  </section>
 
-
-  <!-- Switzerland marquee section -->
-  <section class="mt-16 mb-4 scroll-reveal">
-    <div class="max-w-2xl mx-auto px-6 mb-6 text-center">
-      <h1 class="font-bold text-3xl mb-1">Switzerland</h1>
-    </div>
-    <div style="overflow:hidden; width:100%; position:relative;">
-      <div style="position:absolute; left:0; top:0; bottom:0; width:80px; background:linear-gradient(to right, white, transparent); z-index:2; pointer-events:none;"></div>
-      <div style="position:absolute; right:0; top:0; bottom:0; width:80px; background:linear-gradient(to left, white, transparent); z-index:2; pointer-events:none;"></div>
-      <div id="switzerland-track" style="display:flex; gap:12px; width:max-content; will-change:transform; padding:8px 0 16px;"></div>
+    <div class="photo-section">
+      <p class="photo-label">[ Spain ]</p>
+      <div class="photo-strip">
+        {spain.map((src, i) => (
+          <img src={src} alt="" loading="lazy" decoding="async" class={i === 6 ? "color" : ""} />
+        ))}
+      </div>
     </div>
   </section>
 
-  <div class="mb-20"></div>
-
+  <!-- Lightbox -->
+  <div id="photo-lightbox" class="photo-lightbox">
+    <button id="photo-lightbox-close" class="photo-lightbox-close">&times;</button>
+    <div class="photo-lightbox-main">
+      <img id="photo-lightbox-img" src="" alt="" />
+    </div>
+    <div id="photo-lightbox-strip" class="photo-lightbox-strip"></div>
+  </div>
 </Layout>
 
+<style>
+  .photo-section {
+    margin-bottom: 40px;
+  }
+
+  .photo-label {
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.7;
+    margin-bottom: 10px;
+  }
+
+  .photo-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .photo-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .photo-strip img {
+    height: 120px;
+    width: auto;
+    flex-shrink: 0;
+    display: block;
+    transition: filter 0.3s ease;
+    filter: grayscale(100%);
+  }
+
+  .photo-strip img.color {
+    filter: grayscale(0%);
+  }
+
+  .photo-strip:hover img {
+    filter: grayscale(100%);
+  }
+
+  .photo-strip:hover img:hover {
+    filter: grayscale(0%);
+  }
+
+  .photo-strip:hover img.color {
+    filter: grayscale(100%);
+  }
+
+  .photo-strip:hover img.color:hover {
+    filter: grayscale(0%);
+  }
+
+  .photo-strip img {
+    cursor: pointer;
+  }
+
+  .photo-lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 9999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .photo-lightbox.active {
+    display: flex;
+  }
+
+  .photo-lightbox-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.5;
+    z-index: 10;
+  }
+
+  .photo-lightbox-close:hover {
+    opacity: 1;
+  }
+
+  .photo-lightbox-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    min-height: 0;
+  }
+
+  .photo-lightbox-main img {
+    max-width: 90%;
+    max-height: 65vh;
+    object-fit: contain;
+  }
+
+  .photo-lightbox-strip {
+    display: flex;
+    gap: 6px;
+    padding: 16px 20px 24px;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .photo-lightbox-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .photo-lightbox-strip img {
+    height: 60px;
+    width: auto;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: opacity 0.2s;
+    filter: none;
+  }
+
+  .photo-lightbox-strip img.active {
+    opacity: 1;
+  }
+
+  .photo-lightbox-strip img:hover {
+    opacity: 0.8;
+  }
+</style>
+
 <script is:inline>
-  (function () {
-    // Gallery marquee
-        var GALLERY = [
-      "/photography/thumbs/morocco--98586D38-38FC-4F70-BCAF-1A20B19D7947.webp",
-      "/photography/thumbs/morocco--IMG_3049.webp",
-      "/photography/thumbs/morocco--IMG_7172.webp",
-      "/photography/thumbs/morocco--IMG_8971.webp",
-      "/photography/thumbs/morocco--IMG_9150.webp",
-      "/photography/thumbs/morocco--IMG_9172.webp",
-      "/photography/thumbs/morocco--IMG_9295.webp",
-      "/photography/thumbs/morocco--IMG_9553.webp",
-      "/photography/thumbs/morocco--Tezza-5653.webp"
-    ];
+  document.addEventListener('astro:page-load', function() {
+    var lightbox = document.getElementById('photo-lightbox');
+    var mainImg = document.getElementById('photo-lightbox-img');
+    var strip = document.getElementById('photo-lightbox-strip');
+    var closeBtn = document.getElementById('photo-lightbox-close');
+    if (!lightbox || !mainImg || !strip || !closeBtn) return;
 
-    var track = document.getElementById('gallery-track');
-    if (!track) return;
+    var currentAlbum = [];
 
-    var all = GALLERY.concat(GALLERY);
-    all.forEach(function (src) {
-      var item = document.createElement('div');
-      item.style.cssText = 'flex-shrink:0; width:200px; height:140px; overflow:hidden; border-radius:4px;';
-      var img = document.createElement('img');
-      img.src = src;
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      img.style.cssText = 'width:100%; height:100%; object-fit:cover;';
-      item.appendChild(img);
-      track.appendChild(item);
+    document.querySelectorAll('.photo-strip img').forEach(function(img) {
+      img.addEventListener('click', function() {
+        var parent = img.closest('.photo-strip');
+        var siblings = Array.from(parent.querySelectorAll('img'));
+        currentAlbum = siblings.map(function(s) { return s.src; });
+        openLightbox(img.src);
+      });
     });
 
-    var gx = 0;
-    var gPaused = false;
-    track.addEventListener('mouseenter', function () { gPaused = true; });
-    track.addEventListener('mouseleave', function () { gPaused = false; });
-
-    function animateGallery() {
-      if (!gPaused) {
-        gx -= 0.6;
-        var half = track.scrollWidth / 2;
-        if (Math.abs(gx) >= half) gx = 0;
-        track.style.transform = 'translateX(' + gx + 'px)';
-      }
-      requestAnimationFrame(animateGallery);
-    }
-    animateGallery();
-
-    // Spain marquee
-    var SPAIN = [
-      "/photography/thumbs/spain--IMG_1036.webp",
-      "/photography/thumbs/spain--IMG_1065.webp",
-      "/photography/thumbs/spain--IMG_3242.webp",
-      "/photography/thumbs/spain--IMG_5296.webp",
-      "/photography/thumbs/spain--IMG_5336.webp",
-      "/photography/thumbs/spain--IMG_5660.webp",
-      "/photography/thumbs/spain--IMG_6780.webp",
-      "/photography/thumbs/spain--IMG_6797.webp"
-    ];
-    var spainTrack = document.getElementById('spain-track');
-    if (spainTrack) {
-      var spainAll = SPAIN.concat(SPAIN);
-      spainAll.forEach(function (src) {
-        var item = document.createElement('div');
-        item.style.cssText = 'flex-shrink:0; width:200px; height:140px; overflow:hidden; border-radius:4px;';
-        var img = document.createElement('img');
-        img.src = src;
-        img.loading = 'lazy';
-        img.decoding = 'async';
-        img.style.cssText = 'width:100%; height:100%; object-fit:cover;';
-        item.appendChild(img);
-        spainTrack.appendChild(item);
+    function openLightbox(src) {
+      strip.innerHTML = '';
+      currentAlbum.forEach(function(s) {
+        var thumb = document.createElement('img');
+        thumb.src = s;
+        if (s === src) thumb.className = 'active';
+        thumb.addEventListener('click', function() {
+          mainImg.src = s;
+          strip.querySelectorAll('img').forEach(function(t) { t.className = ''; });
+          thumb.className = 'active';
+        });
+        strip.appendChild(thumb);
       });
-      var sx = 0;
-      var sPaused = false;
-      spainTrack.addEventListener('mouseenter', function () { sPaused = true; });
-      spainTrack.addEventListener('mouseleave', function () { sPaused = false; });
-      function animateSpain() {
-        if (!sPaused) {
-          sx -= 0.6;
-          var half = spainTrack.scrollWidth / 2;
-          if (Math.abs(sx) >= half) sx = 0;
-          spainTrack.style.transform = 'translateX(' + sx + 'px)';
-        }
-        requestAnimationFrame(animateSpain);
-      }
-      animateSpain();
+      mainImg.src = src;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
     }
 
-    // Switzerland marquee
-    var SWITZERLAND = [
-      "/photography/thumbs/switzerland--A9CAAB5F-644C-4EA6-96E6-193BB256629B.webp",
-      "/photography/thumbs/switzerland--IMG_0403.webp",
-      "/photography/thumbs/switzerland--IMG_0435.webp",
-      "/photography/thumbs/switzerland--IMG_0913.webp",
-      "/photography/thumbs/switzerland--IMG_1154.webp",
-      "/photography/thumbs/switzerland--IMG_1414.webp",
-      "/photography/thumbs/switzerland--IMG_1551.webp",
-      "/photography/thumbs/switzerland--IMG_1661.webp",
-      "/photography/thumbs/switzerland--IMG_1857.webp",
-      "/photography/thumbs/switzerland--IMG_2243.webp",
-      "/photography/thumbs/switzerland--IMG_2261.webp",
-      "/photography/thumbs/switzerland--IMG_2707.webp",
-      "/photography/thumbs/switzerland--IMG_9831.webp"
-    ];
-    var swissTrack = document.getElementById('switzerland-track');
-    if (swissTrack) {
-      var swissAll = SWITZERLAND.concat(SWITZERLAND);
-      swissAll.forEach(function (src) {
-        var item = document.createElement('div');
-        item.style.cssText = 'flex-shrink:0; width:200px; height:140px; overflow:hidden; border-radius:4px;';
-        var img = document.createElement('img');
-        img.src = src;
-        img.loading = 'lazy';
-        img.decoding = 'async';
-        img.style.cssText = 'width:100%; height:100%; object-fit:cover;';
-        item.appendChild(img);
-        swissTrack.appendChild(item);
-      });
-      var wx = 0;
-      var wPaused = false;
-      swissTrack.addEventListener('mouseenter', function () { wPaused = true; });
-      swissTrack.addEventListener('mouseleave', function () { wPaused = false; });
-      function animateSwitzerland() {
-        if (!wPaused) {
-          wx -= 0.6;
-          var half = swissTrack.scrollWidth / 2;
-          if (Math.abs(wx) >= half) wx = 0;
-          swissTrack.style.transform = 'translateX(' + wx + 'px)';
-        }
-        requestAnimationFrame(animateSwitzerland);
+    closeBtn.addEventListener('click', function() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
       }
-      animateSwitzerland();
-    }
-  })();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        var idx = currentAlbum.indexOf(mainImg.src);
+        if (e.key === 'ArrowRight') idx = (idx + 1) % currentAlbum.length;
+        else idx = (idx - 1 + currentAlbum.length) % currentAlbum.length;
+        mainImg.src = currentAlbum[idx];
+        strip.querySelectorAll('img').forEach(function(t, i) { t.className = i === idx ? 'active' : ''; });
+      }
+    });
+  });
 </script>
